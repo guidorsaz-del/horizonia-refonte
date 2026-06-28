@@ -10,10 +10,10 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#04020A;
-  --bg2:#080514;
-  --bg3:#0D0720;
-  --bg4:#120B2A;
+  --bg:#1C1035;
+  --bg2:#231842;
+  --bg3:#2A1E4E;
+  --bg4:#32255A;
   --acc:#7C3AED;
   --acc-l:#A78BFA;
   --acc-dim:rgba(124,58,237,.12);
@@ -42,13 +42,13 @@ nav{
   position:fixed;top:0;left:0;right:0;z-index:600;
   height:68px;padding:0 5vw;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(4,2,10,.75);
+  background:rgba(28,16,53,.75);
   backdrop-filter:blur(22px) saturate(180%);
   -webkit-backdrop-filter:blur(22px) saturate(180%);
-  border-bottom:1px solid rgba(124,58,237,.1);
+  border-bottom:1px solid rgba(124,58,237,.15);
   transition:background .3s;
 }
-nav.scrolled{background:rgba(4,2,10,.92)}
+nav.scrolled{background:rgba(28,16,53,.95)}
 .nav-logo{
   display:flex;align-items:center;gap:10px;
   text-decoration:none;
@@ -97,9 +97,9 @@ nav.scrolled{background:rgba(4,2,10,.92)}
 .hero-ambient{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
-    radial-gradient(ellipse 60% 80% at 72% 50%,rgba(124,58,237,.06),transparent),
-    radial-gradient(ellipse 40% 50% at 25% 75%,rgba(167,139,250,.04),transparent),
-    linear-gradient(to right,rgba(4,2,10,.88) 40%,rgba(4,2,10,.08) 78%);
+    radial-gradient(ellipse 60% 80% at 72% 50%,rgba(124,58,237,.14),transparent),
+    radial-gradient(ellipse 40% 50% at 25% 75%,rgba(167,139,250,.08),transparent),
+    linear-gradient(to right,rgba(28,16,53,.9) 38%,rgba(28,16,53,.05) 75%);
 }
 .hero-inner{position:relative;z-index:2;max-width:660px;padding:0 5vw;padding-top:68px}
 .hero-badge-top{
@@ -157,7 +157,7 @@ nav.scrolled{background:rgba(4,2,10,.92)}
 /* floating badges */
 .fbadge{
   position:absolute;z-index:3;
-  background:rgba(8,5,20,.88);
+  background:rgba(28,16,53,.88);
   border:1px solid rgba(124,58,237,.2);
   border-radius:14px;padding:.8rem 1.2rem;
   backdrop-filter:blur(16px);
@@ -603,7 +603,7 @@ footer{
   nav.open .nav-links{
     display:flex;flex-direction:column;
     position:fixed;top:68px;left:0;right:0;bottom:0;
-    background:rgba(4,2,10,.97);backdrop-filter:blur(24px);
+    background:rgba(28,16,53,.97);backdrop-filter:blur(24px);
     padding:2.5rem 5vw;gap:2rem;z-index:598;
   }
   nav.open .nav-links a{font-size:1.3rem}
@@ -802,6 +802,13 @@ footer{
       </div>
 
     </div>
+    <!--
+    ╔══════════════════════════════════════════════════════════╗
+    ║  AJOUTER UN SERVICE : copier un .svc-slide ci-dessus    ║
+    ║  Puis changer #svc-track width → 400vw (4 slides)       ║
+    ║  Ajouter un <div class="sdot"></div> dans #svcDots       ║
+    ╚══════════════════════════════════════════════════════════╝
+    -->
   </div>
 </div>
 
@@ -826,8 +833,8 @@ footer{
   </div>
   <div class="rr">
     <span class="s-eye">À propos</span>
-    <h2 class="s-title">Pas une agence.<br>Un expert dédié.</h2>
-    <p class="s-sub">Je suis Guillaume, développeur web basé à Martigny. Je travaille directement avec vous, sans intermédiaire ni jargon — pour un résultat concret, à prix de freelance.</p>
+    <h2 class="s-title">Pas une agence.<br>Un studio dédié.</h2>
+    <p class="s-sub">Horizon IA est un studio web indépendant basé à Martigny. Vous travaillez avec un interlocuteur unique, sans agence intermédiaire ni jargon technique, pour un résultat concret à prix de freelance.</p>
     <div class="about-chips">
       <span class="chip">Martigny, Valais</span>
       <span class="chip">Remote</span>
@@ -836,11 +843,11 @@ footer{
       <span class="chip">Démo gratuite</span>
     </div>
     <ul class="about-feats">
-      <li><span>→</span>Vous voyez le site avant de payer le moindre franc</li>
+      <li><span>→</span>Le site est visible en ligne avant tout engagement de votre part</li>
       <li><span>→</span>Délai garanti : 7 jours ou moins</li>
       <li><span>→</span>Prix fixé à l'avance, jamais de surprise en cours de projet</li>
-      <li><span>→</span>Formation à la gestion du contenu incluse</li>
-      <li><span>→</span>Suivi et disponibilité après la livraison</li>
+      <li><span>→</span>Formation à la gestion du contenu incluse à la livraison</li>
+      <li><span>→</span>Suivi et disponibilité après la mise en ligne</li>
     </ul>
     <a href="#contact" class="btn-violet" style="display:inline-flex">Demander ma démo gratuite</a>
   </div>
@@ -858,28 +865,28 @@ footer{
       <span class="proc-step">Étape 01</span>
       <div class="proc-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
       <div class="proc-h">Brief de 30 minutes</div>
-      <p class="proc-p">Un appel ou un échange écrit pour comprendre votre activité, vos clients et ce que vous attendez du site.</p>
+      <p class="proc-p">Un appel ou un échange écrit pour comprendre votre activité, vos clients et ce que vous attendez du site. Gratuit et sans engagement.</p>
       <div class="proc-n">01</div>
     </div>
     <div class="proc-c r d1">
       <span class="proc-step">Étape 02</span>
       <div class="proc-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
       <div class="proc-h">Démo en ligne gratuite</div>
-      <p class="proc-p">Je génère une version complète de votre futur site, accessible en ligne. Vous la validez avant de vous engager.</p>
+      <p class="proc-p">Une version complète de votre futur site est générée et accessible en ligne. Vous la validez avant tout engagement financier.</p>
       <div class="proc-n">02</div>
     </div>
     <div class="proc-c r d2">
       <span class="proc-step">Étape 03</span>
       <div class="proc-ico"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
       <div class="proc-h">Développement final</div>
-      <p class="proc-p">Ajustements selon vos retours, photos réelles intégrées, SEO configuré. Livraison du site définitif en 7 jours.</p>
+      <p class="proc-p">Ajustements selon vos retours, photos réelles intégrées, SEO configuré. Le site définitif est livré dans les 7 jours.</p>
       <div class="proc-n">03</div>
     </div>
     <div class="proc-c r d3">
       <span class="proc-step">Étape 04</span>
       <div class="proc-ico"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
       <div class="proc-h">Mise en ligne &amp; suivi</div>
-      <p class="proc-p">Domaine, hébergement, mise en ligne. Je vous forme à la gestion du site et reste disponible après livraison.</p>
+      <p class="proc-p">Domaine, hébergement, mise en ligne. Une formation à la gestion du site est incluse, avec un suivi disponible après livraison.</p>
       <div class="proc-n">04</div>
     </div>
   </div>
@@ -1071,7 +1078,7 @@ footer{
   <div class="faq-inner">
     <div class="faq-item">
       <button class="faq-btn">C'est quoi exactement la démo gratuite ?<span class="faq-ico">+</span></button>
-      <div class="faq-body">Je crée une version complète de votre futur site, accessible en ligne via un lien. Vous la voyez, vous la partagez, vous décidez. Si elle ne vous convient pas, vous ne payez rien. Si elle vous plaît, on finalise ensemble.</div>
+      <div class="faq-body">Horizon IA crée une version complète de votre futur site, accessible en ligne via un lien. Vous la voyez, vous la partagez, vous décidez. Si elle ne vous convient pas, vous ne payez rien. Si elle vous plaît, on finalise ensemble.</div>
     </div>
     <div class="faq-item">
       <button class="faq-btn">Combien de temps pour livrer un site ?<span class="faq-ico">+</span></button>
@@ -1079,19 +1086,19 @@ footer{
     </div>
     <div class="faq-item">
       <button class="faq-btn">Le prix affiché est-il vraiment tout inclus ?<span class="faq-ico">+</span></button>
-      <div class="faq-body">Oui. Le prix que vous voyez est le prix final. Aucun frais supplémentaire en cours de projet. Si vous souhaitez des options non incluses dans la formule, elles sont chiffrées à l'avance et ajoutées à votre accord.</div>
+      <div class="faq-body">Oui. Le prix affiché est le prix final. Aucun frais supplémentaire en cours de projet. Si vous souhaitez des options non incluses dans votre formule, elles sont chiffrées à l'avance et soumises à votre accord avant tout travail.</div>
     </div>
     <div class="faq-item">
       <button class="faq-btn">Puis-je modifier le site moi-même après livraison ?<span class="faq-ico">+</span></button>
-      <div class="faq-body">Oui. Je vous livre le code source complet et vous forme à la gestion du contenu. Pour les modifications plus complexes, je suis disponible à un tarif horaire transparent.</div>
+      <div class="faq-body">Oui. Le code source complet vous est livré, avec une formation à la gestion du contenu. Pour les modifications plus complexes, une assistance est disponible à un tarif horaire transparent, communiqué à l'avance.</div>
     </div>
     <div class="faq-item">
       <button class="faq-btn">Travaillez-vous uniquement en Valais ?<span class="faq-ico">+</span></button>
-      <div class="faq-body">Non. Je travaille avec des clients partout en Suisse et à l'international. Tout se passe à distance via visioconférence et outils collaboratifs. La localisation n'est jamais un obstacle.</div>
+      <div class="faq-body">Non. Horizon IA travaille avec des clients partout en Suisse et à l'international. Tout se passe à distance via visioconférence et outils collaboratifs. La localisation n'est jamais un obstacle.</div>
     </div>
     <div class="faq-item">
       <button class="faq-btn">L'automatisation IA, c'est pour qui ?<span class="faq-ico">+</span></button>
-      <div class="faq-body">Pour les commerces et indépendants qui perdent du temps sur des tâches répétitives : emails de relance, confirmations de rendez-vous, rapports, facturation. Si vous faites quelque chose de régulier et prévisible, c'est automatisable.</div>
+      <div class="faq-body">Pour les commerces et indépendants qui perdent du temps sur des tâches répétitives : emails de relance, confirmations de rendez-vous, rapports, facturation. Tout ce qui est régulier et prévisible est automatisable, sans coder vous-même.</div>
     </div>
   </div>
 </section>
