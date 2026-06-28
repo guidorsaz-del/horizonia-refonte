@@ -1,1342 +1,1453 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Horizon IA - Sites web et automatisation pour PME suisses</title>
-  <meta name="description" content="Horizon IA refond des sites web et automatise les tâches répétitives des PME suisses. Résultat en 7 jours, à partir de 350 CHF.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-  <style>
-    /* ============ TOKENS ============ */
-    :root {
-      --bg:        #050d1b;
-      --bg2:       #081428;
-      --bg3:       #0c1d35;
-      --acc:       #22d3ee;
-      --acc2:      #818cf8;
-      --acc-dim:   rgba(34,211,238,.1);
-      --acc-bdr:   rgba(34,211,238,.22);
-      --acc-glow:  rgba(34,211,238,.16);
-      --text:      #dde6f0;
-      --mid:       #7c8fa6;
-      --muted:     #374a5e;
-      --bdr:       rgba(255,255,255,.065);
-      --bdr2:      rgba(255,255,255,.12);
-      --r:         12px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horizonia — Sites Web qui Convertissent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04090f;
+  --bg2:#070e19;
+  --bg3:#0b1628;
+  --bg4:#0f1f3a;
+  --acc:#22d3ee;
+  --acc-dim:rgba(34,211,238,.12);
+  --acc-glow:rgba(34,211,238,.4);
+  --text:#e2ecf6;
+  --mid:#637a94;
+  --r:14px;
+  --font-head:'Space Grotesk',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
 
-    /* ============ RESET ============ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; cursor: pointer; border: none; background: none; }
-    img { display: block; max-width: 100%; }
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font-body);
+  font-weight:400;line-height:1.65;
+  overflow-x:hidden;
+}
+::selection{background:rgba(34,211,238,.25);color:#fff}
 
-    /* ============ SCROLL PROGRESS ============ */
-    #progress {
-      position: fixed;
-      top: 0; left: 0;
-      height: 2px;
-      width: 100%;
-      background: linear-gradient(90deg, var(--acc), var(--acc2));
-      transform-origin: left;
-      transform: scaleX(0);
-      z-index: 200;
-      animation: scroll-progress linear;
-      animation-timeline: scroll();
-    }
-    @keyframes scroll-progress { to { transform: scaleX(1); } }
+/* ---------- PROGRESS ---------- */
+#prog{
+  position:fixed;top:0;left:0;height:2px;z-index:9999;
+  background:linear-gradient(90deg,var(--acc),#818cf8,var(--acc));
+  background-size:200%;
+  width:0;
+  animation:prog-shimmer 2s linear infinite;
+}
+@keyframes prog-shimmer{0%{background-position:100%}100%{background-position:-100%}}
 
-    /* ============ REVEALS ============ */
-    .rv {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .65s cubic-bezier(.16,1,.3,1),
-                  transform .65s cubic-bezier(.16,1,.3,1);
-    }
-    .rv.in { opacity: 1; transform: translateY(0); }
-    .rv.d1 { transition-delay: .1s; }
-    .rv.d2 { transition-delay: .2s; }
-    .rv.d3 { transition-delay: .3s; }
-    .rv.d4 { transition-delay: .4s; }
+/* ---------- NAV ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:600;
+  height:66px;padding:0 5vw;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(4,9,15,.7);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid rgba(34,211,238,.06);
+  transition:background .3s;
+}
+nav.scrolled{background:rgba(4,9,15,.9)}
+.nav-logo{
+  font-family:var(--font-head);font-weight:700;font-size:1.18rem;
+  color:#fff;letter-spacing:-.02em;display:flex;align-items:center;gap:6px;
+}
+.nav-logo .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--acc);
+  box-shadow:0 0 8px var(--acc-glow);
+  display:inline-block;
+  animation:dot-pulse 2.5s ease-in-out infinite;
+}
+@keyframes dot-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{
+  font-size:.82rem;font-weight:500;color:var(--mid);
+  text-decoration:none;letter-spacing:.02em;
+  transition:color .2s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;
+  background:var(--acc);transition:width .3s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{
+  background:var(--acc);color:#040910;
+  font-family:var(--font-head);font-weight:700;font-size:.78rem;
+  letter-spacing:.05em;text-transform:uppercase;
+  padding:.55rem 1.4rem;border-radius:7px;
+  text-decoration:none;
+  box-shadow:0 0 20px rgba(34,211,238,.2);
+  transition:box-shadow .2s,transform .2s,opacity .2s;
+}
+.nav-cta:hover{box-shadow:0 0 36px rgba(34,211,238,.45);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s;border-radius:2px}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
 
-    /* Clip-path text reveal */
-    .clip-wrap { overflow: hidden; display: block; }
-    .clip-inner {
-      display: block;
-      transform: translateY(105%);
-      transition: transform .72s cubic-bezier(.16,1,.3,1);
-    }
-    .clip-inner.in { transform: translateY(0); }
-    .clip-inner.d1 { transition-delay: .08s; }
-    .clip-inner.d2 { transition-delay: .18s; }
+/* ---------- HERO ---------- */
+#hero{
+  position:relative;height:100vh;min-height:660px;
+  display:flex;align-items:center;overflow:hidden;
+}
+#three-canvas{
+  position:absolute;inset:0;width:100%;height:100%;z-index:0;
+  opacity:.9;
+}
+/* ambient gradient overlay */
+.hero-ambient{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 70% at 70% 50%, rgba(34,211,238,.04), transparent),
+    radial-gradient(ellipse 40% 50% at 30% 80%, rgba(14,165,233,.03), transparent),
+    linear-gradient(to right, rgba(4,9,15,.85) 38%, rgba(4,9,15,.1) 75%);
+}
+.hero-inner{
+  position:relative;z-index:2;
+  max-width:640px;padding:0 5vw;padding-top:66px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--acc);
+  padding:.3rem .9rem;
+  border:1px solid rgba(34,211,238,.28);border-radius:100px;
+  background:rgba(34,211,238,.06);
+  backdrop-filter:blur(8px);
+  margin-bottom:1.8rem;
+}
+.hero-eyebrow .pulse{
+  width:6px;height:6px;border-radius:50%;background:var(--acc);flex-shrink:0;
+  animation:dot-pulse 2s ease-in-out infinite;
+}
+.hero-title{
+  font-family:var(--font-head);font-size:clamp(2.6rem,6.5vw,4.6rem);
+  font-weight:700;line-height:1.06;letter-spacing:-.04em;
+  color:#fff;margin-bottom:1.5rem;
+}
+.hero-title .line2{display:block}
+.tw-word{
+  background:linear-gradient(135deg,#22d3ee,#60a5fa,#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:inline-block;
+}
+.tw-cursor{
+  display:inline-block;width:3px;height:.85em;
+  background:var(--acc);vertical-align:middle;margin-left:2px;
+  animation:blink .65s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-sub{
+  font-size:1.05rem;color:var(--mid);line-height:1.75;
+  max-width:460px;margin-bottom:2.8rem;
+}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-glow{
+  background:var(--acc);color:#04090f;
+  font-family:var(--font-head);font-weight:700;font-size:.875rem;
+  padding:.9rem 2.2rem;border-radius:9px;
+  text-decoration:none;display:inline-flex;align-items:center;gap:.6rem;
+  box-shadow:0 0 0 0 var(--acc-glow);
+  transition:box-shadow .3s,transform .25s;
+  animation:glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse{
+  0%,100%{box-shadow:0 0 24px rgba(34,211,238,.25)}
+  50%{box-shadow:0 0 44px rgba(34,211,238,.5)}
+}
+.btn-glow:hover{transform:translateY(-3px);box-shadow:0 0 56px rgba(34,211,238,.55)!important;animation:none}
+.btn-ghost{
+  border:1px solid rgba(34,211,238,.25);
+  color:var(--text);
+  font-family:var(--font-head);font-weight:600;font-size:.875rem;
+  padding:.9rem 2rem;border-radius:9px;
+  text-decoration:none;
+  backdrop-filter:blur(8px);
+  transition:border-color .25s,background .25s,transform .25s;
+}
+.btn-ghost:hover{border-color:var(--acc);background:rgba(34,211,238,.06);transform:translateY(-2px)}
+/* floating indicator badges */
+.hero-badge{
+  position:absolute;z-index:3;
+  background:rgba(7,14,25,.88);
+  border:1px solid rgba(34,211,238,.15);
+  border-radius:12px;
+  padding:.75rem 1.1rem;
+  backdrop-filter:blur(16px);
+  display:flex;align-items:center;gap:.7rem;
+  pointer-events:none;
+}
+.hero-badge.b1{top:22%;right:5vw;animation:badge-float 5s ease-in-out infinite}
+.hero-badge.b2{bottom:22%;right:18vw;animation:badge-float 5s ease-in-out 1.5s infinite}
+@keyframes badge-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.badge-icon{font-size:1.3rem}
+.badge-text strong{display:block;font-size:.82rem;font-weight:700;color:#fff;line-height:1.1}
+.badge-text span{font-size:.68rem;color:var(--mid)}
+.scroll-arrow{
+  position:absolute;bottom:2rem;left:5vw;z-index:2;
+  display:flex;flex-direction:column;align-items:flex-start;gap:.4rem;
+  color:var(--mid);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--acc),transparent);
+  animation:line-grow 2s ease-in-out infinite;
+}
+@keyframes line-grow{0%,100%{height:40px;opacity:1}50%{height:20px;opacity:.4}}
 
-    @media (prefers-reduced-motion: reduce) {
-      .rv, .clip-inner { opacity: 1; transform: none; transition: none; }
-      #progress { animation: none; transform: scaleX(0); }
-      .badge-dot { animation: none; }
-      .float-a, .float-b { animation: none; }
-      .shimmer-border { animation: none; }
-    }
+/* ---------- STATS STRIP ---------- */
+#stats{
+  padding:3.5rem 5vw;
+  background:var(--bg2);
+  border-top:1px solid rgba(34,211,238,.06);
+  border-bottom:1px solid rgba(34,211,238,.06);
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+  position:relative;
+  overflow:hidden;
+}
+#stats::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 200% at 50% 0%,rgba(34,211,238,.04),transparent);
+  pointer-events:none;
+}
+.stat{text-align:center}
+.stat-num{
+  font-family:var(--font-head);
+  font-size:clamp(2rem,4.5vw,3rem);
+  font-weight:700;color:#fff;
+  line-height:1;margin-bottom:.4rem;
+  letter-spacing:-.04em;
+}
+.stat-num .c{color:var(--acc)}
+.stat-label{font-size:.72rem;color:var(--mid);letter-spacing:.06em;text-transform:uppercase;font-weight:500}
 
-    /* ============ WRAP ============ */
-    .w {
-      width: 100%;
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
+/* ---------- SHARED SECTION ---------- */
+section{padding:7rem 5vw}
+.s-eye{
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--acc);display:block;margin-bottom:.9rem;
+}
+.s-title{
+  font-family:var(--font-head);
+  font-size:clamp(2rem,4.2vw,3rem);
+  font-weight:700;letter-spacing:-.04em;
+  color:#fff;line-height:1.12;
+}
+.s-sub{font-size:1rem;color:var(--mid);max-width:520px;margin-top:.9rem;line-height:1.75}
 
-    /* ============ NAV ============ */
-    #nav {
-      position: fixed;
-      inset: 0 0 auto 0;
-      z-index: 100;
-      height: 68px;
-      display: flex;
-      align-items: center;
-      padding: 0 2rem;
-      transition: background .3s, border-color .3s;
-      border-bottom: 1px solid transparent;
-    }
-    #nav.scrolled {
-      background: rgba(5,13,27,.86);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom-color: var(--bdr);
-    }
-    .nav-inner {
-      width: 100%;
-      max-width: 1240px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-    }
-    .logo {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: -.02em;
-      margin-right: auto;
-    }
-    .logo em { color: var(--acc); font-style: normal; }
-    .nav-links { display: flex; list-style: none; gap: 2rem; }
-    .nav-links a { font-size: .875rem; color: var(--mid); transition: color .2s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      font-size: .85rem;
-      font-weight: 500;
-      padding: .48rem 1.2rem;
-      border: 1px solid var(--acc-bdr);
-      border-radius: 8px;
-      color: var(--acc);
-      background: var(--acc-dim);
-      transition: background .2s, border-color .2s;
-      white-space: nowrap;
-    }
-    .nav-cta:hover { background: rgba(34,211,238,.18); border-color: rgba(34,211,238,.35); }
+/* ---------- SERVICES — HORIZONTAL SCROLL ---------- */
+#svc-section{padding:0}
+#svc-pin{height:100vh;overflow:hidden;display:flex;align-items:center}
+#svc-track{display:flex;width:300vw;height:100%;will-change:transform}
+.svc-slide{
+  width:100vw;height:100%;flex-shrink:0;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:5vw;padding:0 8vw;
+  position:relative;
+}
+.svc-bg-num{
+  position:absolute;right:3vw;top:50%;transform:translateY(-50%);
+  font-family:var(--font-head);font-size:22vw;font-weight:700;
+  color:rgba(34,211,238,.025);line-height:1;
+  pointer-events:none;user-select:none;
+  letter-spacing:-.08em;
+}
+.svc-n{
+  font-family:var(--font-head);font-size:.7rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--acc);
+  margin-bottom:.8rem;display:block;
+}
+.svc-h{
+  font-family:var(--font-head);font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;letter-spacing:-.04em;color:#fff;
+  margin-bottom:1.2rem;line-height:1.1;
+}
+.svc-p{font-size:1rem;color:var(--mid);line-height:1.75;max-width:440px;margin-bottom:2rem}
+.svc-feats{display:flex;flex-direction:column;gap:.5rem;margin-bottom:2.2rem}
+.svc-feat{
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.875rem;color:var(--text);
+}
+.svc-feat::before{
+  content:'';width:18px;height:18px;border-radius:50%;flex-shrink:0;
+  background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322d3ee' stroke-width='2.5'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");
+  background-size:11px;background-repeat:no-repeat;background-position:center;
+}
+/* 3D card visual */
+.svc-card-3d{
+  perspective:1000px;width:100%;max-width:480px;justify-self:end;
+}
+.svc-card-inner{
+  width:100%;aspect-ratio:4/3;
+  background:var(--bg3);
+  border:1px solid rgba(34,211,238,.12);
+  border-radius:24px;
+  position:relative;overflow:hidden;
+  transform-style:preserve-3d;
+  transition:transform .08s ease-out;
+}
+.svc-card-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(34,211,238,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.svc-card-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(34,211,238,.08),transparent 65%);
+  animation:card-breathe 4s ease-in-out infinite alternate;
+}
+@keyframes card-breathe{0%{opacity:.5}100%{opacity:1}}
+.svc-card-icon{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.svc-card-icon svg{filter:drop-shadow(0 0 24px rgba(34,211,238,.5))}
+.svc-card-corner{position:absolute;width:20px;height:20px;border-color:rgba(34,211,238,.35);border-style:solid}
+.svc-card-corner.tl{top:14px;left:14px;border-width:2px 0 0 2px;border-radius:2px 0 0 0}
+.svc-card-corner.tr{top:14px;right:14px;border-width:2px 2px 0 0;border-radius:0 2px 0 0}
+.svc-card-corner.bl{bottom:14px;left:14px;border-width:0 0 2px 2px;border-radius:0 0 0 2px}
+.svc-card-corner.br{bottom:14px;right:14px;border-width:0 2px 2px 0;border-radius:0 0 2px 0}
+.svc-card-scan{
+  position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--acc),transparent);
+  opacity:.5;animation:scan 3s linear infinite;
+}
+@keyframes scan{0%{top:-1px;opacity:.5}50%{opacity:.8}100%{top:100%;opacity:.5}}
+/* progress dots */
+.svc-dots{
+  position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;gap:.5rem;z-index:10;
+}
+.svc-dot{
+  height:3px;border-radius:2px;
+  background:rgba(255,255,255,.15);
+  transition:width .35s cubic-bezier(.4,0,.2,1),background .35s;
+  width:24px;
+}
+.svc-dot.on{width:44px;background:var(--acc)}
 
-    /* ============ BUTTONS ============ */
-    .btn {
-      font-family: 'DM Sans', sans-serif;
-      font-size: .9375rem;
-      font-weight: 500;
-      padding: .78rem 1.8rem;
-      border-radius: 8px;
-      display: inline-block;
-      white-space: nowrap;
-      transition: background .18s, border-color .18s, color .18s, transform .15s;
-    }
-    .btn:active { transform: translateY(1px) scale(.99); }
-    .btn-prim { background: var(--acc); color: #050d1b; border: none; }
-    .btn-prim:hover { background: #34ddf6; }
-    .btn-ghost {
-      background: transparent;
-      color: var(--mid);
-      border: 1px solid var(--bdr2);
-    }
-    .btn-ghost:hover { border-color: rgba(255,255,255,.24); color: var(--text); }
+/* ---------- ABOUT ---------- */
+#about{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:6vw;align-items:center;
+}
+.about-left{position:relative}
+.about-sphere-wrap{
+  width:100%;aspect-ratio:1;
+  max-width:480px;
+  position:relative;
+}
+/* layered rings */
+.a-ring{
+  position:absolute;border-radius:50%;border:1px solid rgba(34,211,238,.09);
+  top:50%;left:50%;transform:translate(-50%,-50%) rotate(0deg);
+  animation:ring-spin 20s linear infinite;
+}
+.a-ring:nth-child(2){width:80%;height:80%;animation-duration:14s;animation-direction:reverse;border-color:rgba(34,211,238,.13)}
+.a-ring:nth-child(3){width:60%;height:60%;animation-duration:10s;border-color:rgba(14,165,233,.1)}
+@keyframes ring-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.a-dot{
+  position:absolute;width:6px;height:6px;border-radius:50%;background:var(--acc);
+  box-shadow:0 0 8px var(--acc-glow);
+  top:50%;left:0;
+  transform-origin:240px 0;
+  animation:dot-orbit 8s linear infinite;
+}
+@keyframes dot-orbit{to{transform:rotate(360deg)}}
+.about-center-badge{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(7,14,25,.9);border:1px solid rgba(34,211,238,.15);
+  border-radius:20px;padding:2rem 2.5rem;text-align:center;
+  backdrop-filter:blur(20px);
+  box-shadow:0 0 80px rgba(34,211,238,.07);
+}
+.a-badge-num{
+  font-family:var(--font-head);font-size:3.5rem;font-weight:700;
+  color:#fff;line-height:1;letter-spacing:-.05em;
+}
+.a-badge-num span{color:var(--acc)}
+.a-badge-label{font-size:.72rem;color:var(--mid);letter-spacing:.06em;text-transform:uppercase;margin-top:.4rem}
+.about-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0}
+.chip{
+  font-size:.72rem;font-weight:600;letter-spacing:.04em;
+  color:var(--acc);border:1px solid rgba(34,211,238,.22);
+  padding:.25rem .8rem;border-radius:100px;
+  background:rgba(34,211,238,.05);
+}
+.about-list{list-style:none;margin:1.5rem 0 2.2rem}
+.about-list li{
+  display:flex;align-items:flex-start;gap:.8rem;
+  font-size:.92rem;color:var(--text);
+  padding:.65rem 0;
+  border-bottom:1px solid rgba(34,211,238,.05);
+  line-height:1.5;
+}
+.about-list li .li-icon{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:var(--acc);margin-top:.1rem;
+}
 
-    /* ============ HERO ============ */
-    #hero {
-      min-height: 100dvh;
-      display: grid;
-      grid-template-columns: 58fr 42fr;
-      align-items: center;
-      padding-top: 68px;
-      position: relative;
-      overflow: hidden;
-    }
+/* ---------- PROCESS ---------- */
+#process{background:var(--bg2)}
+.process-track{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  border:1px solid rgba(34,211,238,.07);
+  border-radius:20px;overflow:hidden;margin-top:3.5rem;
+}
+.proc-card{
+  background:var(--bg3);
+  padding:2.5rem 1.8rem;
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.proc-card:hover{background:var(--bg4)}
+.proc-card::after{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--acc),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .5s;
+}
+.proc-card:hover::after{transform:scaleX(1)}
+.proc-step{
+  font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--acc);margin-bottom:1.4rem;display:block;
+}
+.proc-ico{
+  width:52px;height:52px;border-radius:14px;
+  background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.15);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.4rem;
+}
+.proc-ico svg{width:24px;height:24px;stroke:var(--acc);fill:none;stroke-width:1.5}
+.proc-h{
+  font-family:var(--font-head);font-size:1rem;font-weight:700;
+  color:#fff;margin-bottom:.5rem;
+}
+.proc-p{font-size:.85rem;color:var(--mid);line-height:1.65}
+.proc-num{
+  position:absolute;bottom:1rem;right:1.5rem;
+  font-family:var(--font-head);font-size:3.5rem;font-weight:700;
+  color:rgba(34,211,238,.04);line-height:1;
+}
 
-    /* background grid */
-    #hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(34,211,238,.028) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34,211,238,.028) 1px, transparent 1px);
-      background-size: 64px 64px;
-      pointer-events: none;
-      z-index: 0;
-    }
+/* ---------- PRICING ---------- */
+#pricing{padding:7rem 5vw}
+.pricing-wrap{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;max-width:1100px;margin:3.5rem auto 0;
+}
+.p-card{
+  background:var(--bg2);
+  border:1px solid rgba(34,211,238,.09);
+  border-radius:22px;padding:2.5rem 2rem;
+  position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s;
+  --mx:50%;--my:50%;
+}
+.p-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(300px circle at var(--mx) var(--my),rgba(34,211,238,.05),transparent 70%);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.p-card:hover::before{opacity:1}
+.p-card:hover{transform:translateY(-5px);border-color:rgba(34,211,238,.22)}
+.p-card.featured{
+  border-color:rgba(34,211,238,.3);
+  background:linear-gradient(145deg,rgba(34,211,238,.05) 0%,var(--bg2) 60%);
+}
+.p-card.featured::after{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--acc),transparent);
+}
+.p-badge{
+  position:absolute;top:1.5rem;right:1.5rem;
+  font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--acc);color:#04090f;
+  padding:.22rem .7rem;border-radius:100px;
+}
+.p-plan{font-size:.72rem;color:var(--mid);letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:.7rem}
+.p-price{
+  font-family:var(--font-head);font-size:3rem;font-weight:700;
+  color:#fff;line-height:1;margin-bottom:.3rem;letter-spacing:-.05em;
+}
+.p-price sup{font-size:1.1rem;vertical-align:super;font-weight:500;margin-right:1px}
+.p-price sub{font-size:.9rem;color:var(--mid);font-weight:400;letter-spacing:0}
+.p-desc{font-size:.85rem;color:var(--mid);margin-bottom:2rem;line-height:1.6;margin-top:.4rem}
+.p-list{list-style:none;margin-bottom:2rem}
+.p-list li{
+  display:flex;align-items:flex-start;gap:.6rem;
+  font-size:.875rem;color:var(--text);
+  padding:.42rem 0;border-bottom:1px solid rgba(255,255,255,.04);
+}
+.p-list li::before{
+  content:'';width:16px;height:16px;flex-shrink:0;
+  border-radius:50%;margin-top:.1rem;
+  background:rgba(34,211,238,.1);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322d3ee' stroke-width='2.5'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");
+  background-size:9px;background-repeat:no-repeat;background-position:center;
+}
+.p-list li.off{color:var(--mid)}
+.p-list li.off::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23637a94' stroke-width='2'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+  background-color:rgba(255,255,255,.04);
+}
+.p-btn{
+  display:block;width:100%;text-align:center;
+  font-family:var(--font-head);font-weight:700;font-size:.85rem;
+  padding:.85rem;border-radius:10px;text-decoration:none;
+  transition:all .25s;
+}
+.p-btn.outline{
+  border:1px solid rgba(34,211,238,.25);color:var(--text);
+}
+.p-btn.outline:hover{border-color:var(--acc);background:rgba(34,211,238,.06)}
+.p-btn.solid{
+  background:var(--acc);color:#04090f;
+  box-shadow:0 0 24px rgba(34,211,238,.2);
+}
+.p-btn.solid:hover{box-shadow:0 0 44px rgba(34,211,238,.45);transform:translateY(-1px)}
 
-    /* canvas particle field */
-    #hero-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
+/* ---------- TESTIMONIALS ---------- */
+#testi{background:var(--bg2);padding:7rem 5vw}
+.testi-grid{
+  display:grid;grid-template-columns:1fr 1.4fr 1fr;
+  gap:1.5rem;align-items:start;margin-top:3.5rem;
+}
+.t-card{
+  background:var(--bg3);border:1px solid rgba(34,211,238,.08);
+  border-radius:18px;padding:2rem;
+  transition:transform .3s,border-color .3s;
+}
+.t-card:hover{transform:translateY(-4px);border-color:rgba(34,211,238,.2)}
+.t-card.big{padding:2.5rem;border-color:rgba(34,211,238,.15)}
+.t-stars{margin-bottom:.9rem;display:flex;gap:2px}
+.t-stars span{color:var(--acc);font-size:.85rem}
+.t-text{
+  font-size:.95rem;color:var(--text);
+  line-height:1.8;font-style:italic;margin-bottom:1.5rem;
+}
+.t-author{display:flex;align-items:center;gap:.8rem}
+.t-av{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--acc),#818cf8);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-size:.82rem;font-weight:700;color:#04090f;
+  flex-shrink:0;
+}
+.t-name{font-size:.875rem;font-weight:600;color:#fff}
+.t-role{font-size:.72rem;color:var(--mid)}
 
-    /* gradient orbs */
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      filter: blur(80px);
-      z-index: 0;
-    }
-    .orb-1 {
-      width: 520px; height: 520px;
-      top: -80px; left: -120px;
-      background: radial-gradient(circle, rgba(34,211,238,.09) 0%, transparent 65%);
-      animation: orb-move-1 12s infinite ease-in-out;
-    }
-    .orb-2 {
-      width: 400px; height: 400px;
-      bottom: -60px; right: 30%;
-      background: radial-gradient(circle, rgba(129,140,248,.08) 0%, transparent 65%);
-      animation: orb-move-2 15s infinite ease-in-out;
-    }
-    @keyframes orb-move-1 {
-      0%,100% { transform: translate(0,0); }
-      33% { transform: translate(40px,-30px); }
-      66% { transform: translate(-30px,40px); }
-    }
-    @keyframes orb-move-2 {
-      0%,100% { transform: translate(0,0); }
-      40% { transform: translate(-40px,25px); }
-      70% { transform: translate(25px,-30px); }
-    }
+/* ---------- FAQ ---------- */
+#faq{padding:7rem 5vw}
+.faq-inner{max-width:760px;margin:3.5rem auto 0}
+.faq-item{border-bottom:1px solid rgba(34,211,238,.07)}
+.faq-btn{
+  width:100%;background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.5rem 0;gap:1.2rem;
+  font-family:var(--font-head);font-size:1rem;font-weight:600;
+  color:#fff;text-align:left;
+  transition:color .2s;
+}
+.faq-btn:hover{color:var(--acc)}
+.faq-ico{
+  flex-shrink:0;width:30px;height:30px;border-radius:50%;
+  border:1px solid rgba(34,211,238,.22);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--acc);font-size:1.2rem;line-height:1;
+  transition:transform .35s cubic-bezier(.4,0,.2,1),background .3s;
+}
+.faq-item.open .faq-ico{transform:rotate(45deg);background:rgba(34,211,238,.1)}
+.faq-body{
+  font-size:.9rem;color:var(--mid);line-height:1.8;
+  max-height:0;overflow:hidden;
+  transition:max-height .42s ease,padding-bottom .3s;
+}
+.faq-item.open .faq-body{max-height:260px;padding-bottom:1.4rem}
 
-    .hero-left {
-      position: relative;
-      z-index: 2;
-      padding: 5rem 3rem 5rem 0;
-      margin-left: max(2rem, calc((100vw - 1240px) / 2));
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--acc);
-      margin-bottom: 2rem;
-    }
-    .badge-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--acc);
-      animation: pulse-dot 2.4s infinite;
-    }
-    @keyframes pulse-dot {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .3; transform: scale(.8); }
-    }
+/* ---------- CONTACT ---------- */
+#contact{background:var(--bg2);padding:7rem 5vw}
+.contact-grid{
+  display:grid;grid-template-columns:1fr 1.4fr;
+  gap:6vw;align-items:start;
+}
+.contact-info{padding-top:.5rem}
+.c-item{display:flex;align-items:flex-start;gap:1rem;margin-bottom:2rem}
+.c-icon{
+  width:46px;height:46px;border-radius:12px;flex-shrink:0;
+  border:1px solid rgba(34,211,238,.18);
+  background:rgba(34,211,238,.05);
+  display:flex;align-items:center;justify-content:center;
+}
+.c-icon svg{width:20px;height:20px;stroke:var(--acc);fill:none;stroke-width:1.5}
+.c-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.2rem}
+.c-val{font-size:.95rem;color:var(--text)}
+.c-val a{color:var(--acc);text-decoration:none;transition:opacity .2s}
+.c-val a:hover{opacity:.8}
+.avail-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.78rem;font-weight:600;color:#4ade80;
+  padding:.4rem .9rem;border-radius:100px;
+  background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);
+  margin-top:1.5rem;
+}
+.avail-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:dot-pulse 2s infinite}
+form{display:flex;flex-direction:column;gap:1.1rem}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.f-field{display:flex;flex-direction:column;gap:.4rem}
+label{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mid)}
+input,textarea,select{
+  background:var(--bg3);border:1px solid rgba(34,211,238,.13);
+  border-radius:10px;padding:.85rem 1.1rem;
+  color:var(--text);font-family:var(--font-body);font-size:.9rem;
+  outline:none;transition:border-color .25s,box-shadow .25s;
+  appearance:none;-webkit-appearance:none;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--acc);
+  box-shadow:0 0 0 3px rgba(34,211,238,.09);
+}
+textarea{resize:vertical;min-height:130px}
+select option{background:var(--bg3);color:var(--text)}
+.f-submit{
+  position:relative;overflow:hidden;
+  background:var(--acc);color:#04090f;
+  font-family:var(--font-head);font-weight:700;font-size:.9rem;letter-spacing:.02em;
+  padding:1rem 2rem;border:none;border-radius:10px;cursor:pointer;
+  box-shadow:0 0 24px rgba(34,211,238,.2);
+  transition:box-shadow .25s,transform .25s;
+}
+.f-submit::after{
+  content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transform:skewX(-20deg);
+  transition:left .7s;
+}
+.f-submit:hover::after{left:160%}
+.f-submit:hover{box-shadow:0 0 44px rgba(34,211,238,.4);transform:translateY(-2px)}
 
-    .hero-h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: clamp(2.5rem, 3.8vw, 3.8rem);
-      line-height: 1.06;
-      letter-spacing: -.04em;
-      margin-bottom: 1.5rem;
-    }
-    .hero-h1 .tw-wrap {
-      color: var(--acc);
-      display: inline-block;
-      min-width: 280px;
-    }
-    .tw-cursor {
-      display: inline-block;
-      width: 3px;
-      height: .85em;
-      background: var(--acc);
-      margin-left: 3px;
-      vertical-align: middle;
-      animation: blink .8s step-end infinite;
-    }
-    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+/* ---------- CTA BAND ---------- */
+#cta{
+  padding:6rem 5vw;text-align:center;
+  position:relative;overflow:hidden;
+}
+#cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 100% at 50% 0%,rgba(34,211,238,.06),transparent);
+}
+#cta .s-title{margin:0 auto .9rem;text-align:center}
+#cta p{font-size:1.05rem;color:var(--mid);max-width:480px;margin:0 auto 2.5rem}
 
-    .hero-sub {
-      font-size: 1.0625rem;
-      color: var(--mid);
-      line-height: 1.65;
-      max-width: 44ch;
-      margin-bottom: 2.5rem;
-    }
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
+/* ---------- FOOTER ---------- */
+footer{
+  background:var(--bg);
+  border-top:1px solid rgba(34,211,238,.06);
+  padding:3rem 5vw;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1.5rem;
+}
+.f-logo{
+  font-family:var(--font-head);font-weight:700;font-size:1.1rem;
+  color:#fff;display:flex;align-items:center;gap:5px;
+}
+.f-logo .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);display:inline-block}
+.f-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap}
+.f-links a{font-size:.78rem;color:var(--mid);text-decoration:none;transition:color .2s}
+.f-links a:hover{color:var(--text)}
+.f-copy{font-size:.72rem;color:var(--mid)}
 
-    /* hero right */
-    .hero-right {
-      position: relative;
-      z-index: 2;
-      align-self: stretch;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .sphere-wrap {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-    }
-    .sphere-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      opacity: .55;
-      mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
-    }
-    .sphere-glow {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 55% 50%, rgba(34,211,238,.12) 0%, transparent 70%);
-    }
+/* ---------- REVEAL ---------- */
+.r{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.2,0,.2,1),transform .75s cubic-bezier(.2,0,.2,1)}
+.r.in{opacity:1;transform:none}
+.r-d1{transition-delay:.1s}.r-d2{transition-delay:.2s}.r-d3{transition-delay:.3s}.r-d4{transition-delay:.4s}
+.r-l{opacity:0;transform:translateX(-32px);transition:opacity .7s cubic-bezier(.2,0,.2,1),transform .7s cubic-bezier(.2,0,.2,1)}
+.r-l.in{opacity:1;transform:none}
+.r-right{opacity:0;transform:translateX(32px);transition:opacity .7s cubic-bezier(.2,0,.2,1),transform .7s cubic-bezier(.2,0,.2,1)}
+.r-right.in{opacity:1;transform:none}
 
-    /* floating metric cards */
-    .metric {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 2rem 0 2rem 1rem;
-    }
-    .m-card {
-      background: rgba(8,20,40,.82);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(34,211,238,.18);
-      border-radius: 14px;
-      padding: 1.1rem 1.5rem;
-      min-width: 160px;
-    }
-    .m-card:first-child {
-      animation: float-a 5s ease-in-out infinite;
-      align-self: flex-start;
-    }
-    .m-card:last-child {
-      animation: float-b 6s ease-in-out infinite;
-      align-self: flex-end;
-    }
-    @keyframes float-a {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes float-b {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(10px); }
-    }
-    .m-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 1.6rem;
-      letter-spacing: -.04em;
-      color: var(--acc);
-    }
-    .m-lbl { font-size: .72rem; font-weight: 500; color: var(--mid); letter-spacing: .04em; }
-
-    /* ============ STATS ============ */
-    #stats {
-      background: var(--bg2);
-      border-top: 1px solid var(--bdr);
-      border-bottom: 1px solid var(--bdr);
-    }
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      max-width: 1240px;
-      margin: 0 auto;
-    }
-    .stat-cell {
-      padding: 2.25rem 1.5rem;
-      border-right: 1px solid var(--bdr);
-      text-align: center;
-    }
-    .stat-cell:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 2.25rem;
-      letter-spacing: -.05em;
-      line-height: 1;
-      margin-bottom: .35rem;
-      color: var(--text);
-    }
-    .stat-num .a { color: var(--acc); }
-    .stat-lbl { font-size: .7rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
-
-    /* ============ PROBLÈME ============ */
-    #probleme { padding: 9rem 0; }
-    .p-grid {
-      display: grid;
-      grid-template-columns: 54fr 46fr;
-      gap: 7rem;
-      align-items: start;
-    }
-    .sec-h {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: clamp(1.85rem, 2.7vw, 2.6rem);
-      letter-spacing: -.035em;
-      line-height: 1.12;
-      margin-bottom: 1.25rem;
-    }
-    .sec-body {
-      font-size: .9375rem;
-      color: var(--mid);
-      line-height: 1.7;
-    }
-    .pbl-items { display: flex; flex-direction: column; }
-    .pbl-item {
-      padding: 1.65rem 0;
-      border-bottom: 1px solid var(--bdr);
-    }
-    .pbl-item:first-child { border-top: 1px solid var(--bdr); }
-    .pbl-n {
-      font-size: .66rem;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--acc);
-      margin-bottom: .4rem;
-    }
-    .pbl-t {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 600;
-      font-size: .96rem;
-      margin-bottom: .3rem;
-    }
-    .pbl-d { font-size: .875rem; color: var(--mid); line-height: 1.6; }
-
-    /* ============ SERVICES ============ */
-    #services { padding: 0 0 9rem; }
-    .eyebrow {
-      font-size: .66rem;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--acc);
-      margin-bottom: 1rem;
-    }
-    .svc-list { border-top: 1px solid var(--bdr); }
-    .svc-row {
-      display: grid;
-      grid-template-columns: 60px 1fr 1.1fr 148px;
-      align-items: center;
-      gap: 2rem;
-      padding: 2.4rem 1.25rem;
-      border-bottom: 1px solid var(--bdr);
-      border-left: 2px solid transparent;
-      transition: background .25s, border-left-color .25s;
-      position: relative;
-    }
-    .svc-row:hover {
-      background: rgba(34,211,238,.025);
-      border-left-color: var(--acc);
-    }
-    .svc-n { font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 600; letter-spacing: .06em; color: var(--muted); }
-    .svc-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem; margin-bottom: .3rem; }
-    .svc-chip {
-      display: inline-block;
-      font-size: .66rem;
-      font-weight: 700;
-      letter-spacing: .06em;
-      padding: 2px 8px;
-      border: 1px solid var(--acc-bdr);
-      border-radius: 4px;
-      color: var(--acc);
-    }
-    .svc-desc { font-size: .875rem; color: var(--mid); line-height: 1.55; }
-    .svc-price { text-align: right; }
-    .svc-price-n { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; }
-    .svc-price-l { font-size: .72rem; color: var(--muted); margin-top: .15rem; }
-
-    /* ============ PROCESSUS ============ */
-    #processus {
-      padding: 9rem 0;
-      background: var(--bg2);
-      border-top: 1px solid var(--bdr);
-      border-bottom: 1px solid var(--bdr);
-    }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      margin-top: 4rem;
-    }
-    .step-item {
-      padding: 0 2.25rem 0 0;
-      border-right: 1px solid var(--bdr);
-    }
-    .step-item:not(:first-child) { padding-left: 2.25rem; }
-    .step-item:last-child { border-right: none; }
-    .step-big {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 4rem;
-      letter-spacing: -.06em;
-      line-height: 1;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, rgba(255,255,255,.07) 0%, rgba(255,255,255,.02) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      user-select: none;
-    }
-    .step-t { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .95rem; margin-bottom: .5rem; }
-    .step-d { font-size: .875rem; color: var(--mid); line-height: 1.6; }
-
-    /* ============ TARIFS ============ */
-    #tarifs { padding: 9rem 0; }
-    .pricing-wrap {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: .875rem;
-      margin-top: 4rem;
-    }
-
-    /* spotlight cards */
-    .p-card {
-      position: relative;
-      border: 1px solid var(--bdr);
-      border-radius: var(--r);
-      padding: 2.1rem;
-      background: var(--bg2);
-      transition: border-color .25s, transform .25s;
-      overflow: hidden;
-    }
-    .p-card:hover { border-color: var(--bdr2); transform: translateY(-3px); }
-
-    /* mouse spotlight glow inside card */
-    .p-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(280px circle at var(--cx,50%) var(--cy,50%), rgba(34,211,238,.07), transparent 65%);
-      opacity: 0;
-      transition: opacity .3s;
-      pointer-events: none;
-    }
-    .p-card:hover::after { opacity: 1; }
-
-    /* featured shimmer border */
-    .p-card.featured {
-      border-color: transparent;
-      background-image:
-        linear-gradient(var(--bg2), var(--bg2)),
-        linear-gradient(135deg, rgba(34,211,238,.5), rgba(129,140,248,.5), rgba(34,211,238,.5));
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
-      background-size: 100% 100%, 200% 200%;
-      animation: shimmer-border 3s linear infinite;
-    }
-    @keyframes shimmer-border {
-      0% { background-position: 0% 50%, 0% 50%; }
-      50% { background-position: 0% 50%, 100% 50%; }
-      100% { background-position: 0% 50%, 0% 50%; }
-    }
-    .p-card.featured::before {
-      content: 'Populaire';
-      position: absolute;
-      top: -1px; left: 50%;
-      transform: translateX(-50%);
-      background: var(--acc);
-      color: #050d1b;
-      font-size: .62rem;
-      font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      padding: 3px 12px;
-      border-radius: 0 0 8px 8px;
-    }
-
-    .p-tier { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.5rem; }
-    .p-price {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 2.8rem;
-      letter-spacing: -.055em;
-      line-height: 1;
-      margin-bottom: .25rem;
-    }
-    .p-price sup { font-size: 1.1rem; font-weight: 600; vertical-align: super; letter-spacing: 0; color: var(--mid); margin-right: 2px; }
-    .p-price span { font-size: 1rem; font-weight: 400; color: var(--mid); letter-spacing: 0; }
-    .p-note { font-size: .78rem; color: var(--muted); margin-bottom: 1.75rem; margin-top: .25rem; }
-    .p-div { height: 1px; background: var(--bdr); margin: 1.5rem 0; }
-    .p-feats { list-style: none; display: flex; flex-direction: column; gap: .7rem; margin-bottom: 2rem; }
-    .p-feats li { font-size: .875rem; color: var(--mid); display: flex; align-items: flex-start; gap: .6rem; }
-    .p-feats li::before {
-      content: '';
-      display: block; width: 14px; height: 14px; min-width: 14px; margin-top: 2px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M2 7l3.5 3.5L12 3.5' stroke='%2322d3ee' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
-    }
-    .p-btn {
-      display: block;
-      text-align: center;
-      padding: .74rem;
-      border-radius: 8px;
-      font-size: .9rem;
-      font-weight: 500;
-      transition: all .18s;
-    }
-    .p-btn-g { border: 1px solid var(--bdr2); color: var(--mid); }
-    .p-btn-g:hover { border-color: rgba(255,255,255,.24); color: var(--text); }
-    .p-btn-a { background: var(--acc); color: #050d1b; }
-    .p-btn-a:hover { background: #34ddf6; }
-    .pricing-foot { margin-top: 2rem; text-align: center; font-size: .875rem; color: var(--muted); }
-    .pricing-foot a { color: var(--acc); text-decoration: underline; text-underline-offset: 2px; }
-
-    /* ============ FAQ ============ */
-    #faq {
-      padding: 9rem 0;
-      background: var(--bg2);
-      border-top: 1px solid var(--bdr);
-      border-bottom: 1px solid var(--bdr);
-    }
-    .faq-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4.5rem; margin-top: 4rem; }
-    .faq-item { border-bottom: 1px solid var(--bdr); }
-    .faq-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 1.4rem 0;
-      width: 100%;
-      text-align: left;
-    }
-    .faq-q { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: .925rem; line-height: 1.4; }
-    .faq-ico {
-      width: 20px; height: 20px; min-width: 20px;
-      border: 1px solid var(--bdr2);
-      border-radius: 50%;
-      position: relative; flex-shrink: 0;
-    }
-    .faq-ico::before, .faq-ico::after {
-      content: ''; position: absolute;
-      background: var(--mid);
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      transition: transform .25s, opacity .25s;
-    }
-    .faq-ico::before { width: 8px; height: 1.5px; }
-    .faq-ico::after  { width: 1.5px; height: 8px; }
-    .faq-item.open .faq-ico::after { transform: translate(-50%,-50%) rotate(90deg); opacity: 0; }
-    .faq-ans { max-height: 0; overflow: hidden; transition: max-height .38s cubic-bezier(.16,1,.3,1); }
-    .faq-ans p { padding-bottom: 1.4rem; font-size: .875rem; color: var(--mid); line-height: 1.65; }
-    .faq-item.open .faq-ans { max-height: 300px; }
-
-    /* ============ CONTACT ============ */
-    #contact { padding: 9rem 0; }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 42fr 58fr;
-      gap: 5.5rem;
-      align-items: start;
-    }
-    .cdet { display: flex; flex-direction: column; gap: .8rem; margin-top: 2rem; }
-    .cdet-item {
-      display: flex; align-items: center; gap: .75rem;
-      font-size: .875rem; color: var(--mid);
-    }
-    .cdet-item svg { color: var(--acc); flex-shrink: 0; }
-    .form { display: flex; flex-direction: column; gap: 1rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-g { display: flex; flex-direction: column; gap: .35rem; }
-    .form-l { font-size: .77rem; font-weight: 500; color: var(--mid); }
-    .form-c {
-      background: var(--bg2);
-      border: 1px solid var(--bdr);
-      border-radius: 8px;
-      padding: .74rem 1rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .9rem;
-      color: var(--text);
-      transition: border-color .2s, box-shadow .2s;
-      outline: none; width: 100%;
-    }
-    .form-c::placeholder { color: var(--muted); }
-    .form-c:focus { border-color: var(--acc-bdr); box-shadow: 0 0 0 3px rgba(34,211,238,.06); }
-    textarea.form-c { resize: vertical; min-height: 110px; line-height: 1.55; }
-    select.form-c {
-      appearance: none; cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%23374a5e' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 16px;
-    }
-    select.form-c option { background: #081428; }
-
-    /* ============ FOOTER ============ */
-    footer {
-      border-top: 1px solid var(--bdr);
-      background: var(--bg2);
-      padding: 2.25rem 2rem;
-    }
-    .footer-inner {
-      max-width: 1240px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
-    }
-    .f-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: -.02em; }
-    .f-logo em { color: var(--acc); font-style: normal; }
-    .f-links { display: flex; gap: 1.75rem; }
-    .f-links a { font-size: .8rem; color: var(--muted); transition: color .2s; }
-    .f-links a:hover { color: var(--mid); }
-    .f-copy { font-size: .78rem; color: var(--muted); }
-
-    /* ============ RESPONSIVE ============ */
-    @media (max-width: 1100px) {
-      #hero { grid-template-columns: 1fr; }
-      .hero-left { padding: 4rem 2rem; margin-left: 0; }
-      .hero-right { display: none; }
-      .p-grid { grid-template-columns: 1fr; gap: 4rem; }
-      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
-      .svc-row { grid-template-columns: 52px 1fr; grid-template-rows: auto auto; }
-      .svc-desc { grid-column: 1/-1; }
-      .svc-price { grid-column: 1/-1; text-align: left; }
-    }
-    @media (max-width: 860px) {
-      .stats-row { grid-template-columns: repeat(2,1fr); }
-      .stat-cell:nth-child(2) { border-right: none; }
-      .stat-cell:nth-child(3) { border-top: 1px solid var(--bdr); }
-      .stat-cell:nth-child(4) { border-right: none; border-top: 1px solid var(--bdr); }
-      .steps { grid-template-columns: repeat(2,1fr); }
-      .step-item:nth-child(2) { border-right: none; }
-      .step-item:nth-child(3) { border-top: 1px solid var(--bdr); padding-top: 2rem; }
-      .step-item:nth-child(4) { border-right: none; border-top: 1px solid var(--bdr); padding-top: 2rem; }
-      .pricing-wrap { grid-template-columns: 1fr; }
-      .faq-cols { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 640px) {
-      #nav { padding: 0 1.25rem; }
-      .nav-links, .nav-cta { display: none; }
-      .hero-left { padding: 2.5rem 1.25rem; }
-      .hero-h1 { font-size: 2.2rem; }
-      .w { padding: 0 1.25rem; }
-      #probleme, #services, #processus, #tarifs, #faq, #contact { padding-top: 5rem; padding-bottom: 5rem; }
-      .steps { grid-template-columns: 1fr; }
-      .step-item { border-right: none !important; border-bottom: 1px solid var(--bdr); padding: 1.75rem 0 !important; }
-      .step-item:last-child { border-bottom: none; }
-      .form-row { grid-template-columns: 1fr; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
-      .f-links { flex-wrap: wrap; gap: 1rem; }
-    }
-  </style>
+/* ---------- MOBILE ---------- */
+@media(max-width:960px){
+  #stats{grid-template-columns:repeat(2,1fr)}
+  #about{grid-template-columns:1fr}
+  .about-sphere-wrap{max-width:360px;margin:0 auto}
+  .process-track{grid-template-columns:repeat(2,1fr)}
+  .pricing-wrap{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .f-row{grid-template-columns:1fr}
+  nav .nav-links{display:none}
+  .hamburger{display:flex}
+  nav.open .nav-links{
+    display:flex;flex-direction:column;
+    position:fixed;top:66px;left:0;right:0;bottom:0;
+    background:rgba(4,9,15,.97);backdrop-filter:blur(24px);
+    padding:2.5rem 5vw;gap:2rem;z-index:598;
+  }
+  nav.open .nav-links a{font-size:1.3rem}
+  /* disable horiz scroll on mobile */
+  #svc-pin{height:auto;overflow:visible}
+  #svc-track{flex-direction:column;width:100%}
+  .svc-slide{grid-template-columns:1fr;padding:5rem 5vw 2rem;height:auto}
+  .svc-card-3d{justify-self:start;max-width:100%}
+  .svc-card-inner{aspect-ratio:16/9}
+  .svc-bg-num{display:none}
+  .svc-dots{display:none}
+  .hero-badge{display:none}
+}
+@media(max-width:520px){
+  .hero-ctas{flex-direction:column}
+  .btn-glow,.btn-ghost{width:100%;text-align:center;justify-content:center}
+  .process-track{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-  <!-- SCROLL PROGRESS -->
-  <div id="progress"></div>
+<div id="prog"></div>
 
-  <!-- NAV -->
-  <header id="nav">
-    <div class="nav-inner">
-      <a href="#hero" class="logo">HORIZON <em>IA</em></a>
-      <ul class="nav-links">
-        <li><a href="#services">Services</a></li>
-        <li><a href="#processus">Processus</a></li>
-        <li><a href="#tarifs">Tarifs</a></li>
-        <li><a href="#faq">FAQ</a></li>
-      </ul>
-      <a href="#contact" class="nav-cta">Démo gratuite</a>
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Horizonia<span class="dot"></span></div>
+  <ul class="nav-links">
+    <li><a href="#svc-section">Services</a></li>
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#process">Méthode</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Démarrer →</a>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="three-canvas"></canvas>
+  <div class="hero-ambient"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="pulse"></span>Création web · Valais &amp; Remote</div>
+    <h1 class="hero-title">
+      Des sites qui<br>
+      <span class="line2"><span class="tw-word" id="tw"></span><span class="tw-cursor"></span></span>
+    </h1>
+    <p class="hero-sub">
+      Je conçois des sites web haute performance pour les entrepreneurs et PME qui veulent une présence en ligne qui travaille pour eux — 24h/24, sans effort.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-glow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Démarrer un projet
+      </a>
+      <a href="#svc-section" class="btn-ghost">Découvrir les services</a>
     </div>
-  </header>
-
-  <!-- HERO -->
-  <section id="hero">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <canvas id="hero-canvas"></canvas>
-
-    <div class="hero-left">
-      <div class="badge"><div class="badge-dot"></div>Agence web &amp; IA &middot; Valais, Suisse</div>
-      <h1 class="hero-h1">
-        <span class="clip-wrap"><span class="clip-inner">Sites web qui</span></span>
-        <span class="clip-wrap"><span class="clip-inner d1"><span class="tw-wrap" id="tw-target">convertissent</span><span class="tw-cursor" id="tw-cursor"></span>.</span></span>
-        <br>
-        <span class="clip-wrap"><span class="clip-inner d2" style="color:var(--mid);font-weight:600;font-size:.58em;letter-spacing:-.02em;line-height:1.4">Automatisations qui libèrent votre temps.</span></span>
-      </h1>
-      <p class="hero-sub rv" style="transition-delay:.2s">
-        Horizon IA refond des sites web et automatise les tâches répétitives des PME suisses. Résultat en 7 jours, à partir de 350 CHF.
-      </p>
-      <div class="hero-actions rv" style="transition-delay:.35s">
-        <a href="#contact" class="btn btn-prim">Demander une démo</a>
-        <a href="#tarifs" class="btn btn-ghost">Voir les tarifs</a>
-      </div>
+  </div>
+  <div class="hero-badge b1">
+    <div class="badge-icon">⚡</div>
+    <div class="badge-text">
+      <strong>Livraison en 3 jours</strong>
+      <span>Délai garanti</span>
     </div>
+  </div>
+  <div class="hero-badge b2">
+    <div class="badge-icon">🎯</div>
+    <div class="badge-text">
+      <strong>28+ sites livrés</strong>
+      <span>En Valais &amp; Suisse</span>
+    </div>
+  </div>
+  <div class="scroll-arrow">
+    <div class="scroll-line"></div>
+  </div>
+</section>
 
-    <div class="hero-right">
-      <div class="sphere-wrap">
-        <img src="https://images.unsplash.com/photo-1718844054440-22acf5d5c8f0?w=1200&auto=format&fit=crop&q=85" alt="" aria-hidden="true" loading="eager">
-        <div class="sphere-glow"></div>
-      </div>
-      <div class="metric">
-        <div class="m-card">
-          <div class="m-num">20+</div>
-          <div class="m-lbl">Sites réalisés</div>
+<!-- STATS -->
+<div id="stats">
+  <div class="stat r"><div class="stat-num"><span class="cnt" data-v="28" data-s="+">0</span></div><div class="stat-label">Sites livrés</div></div>
+  <div class="stat r r-d1"><div class="stat-num"><span class="cnt" data-v="98" data-s="%">0</span></div><div class="stat-label">Clients satisfaits</div></div>
+  <div class="stat r r-d2"><div class="stat-num"><span class="cnt" data-v="3" data-s=" jours">0</span></div><div class="stat-label">Délai moyen</div></div>
+  <div class="stat r r-d3"><div class="stat-num">Prix <span class="c">fixe</span></div><div class="stat-label">Garanti</div></div>
+</div>
+
+<!-- SERVICES -->
+<div id="svc-section">
+  <div id="svc-pin">
+    <div id="svc-track">
+
+      <div class="svc-slide">
+        <div class="svc-bg-num">01</div>
+        <div>
+          <span class="svc-n">Service 01 / 03</span>
+          <h3 class="svc-h">Site Vitrine<br>Premium</h3>
+          <p class="svc-p">Un site conçu pour convertir les visiteurs en clients. Design sur mesure, animations modernes, optimisé Google et mobile. Votre meilleur commercial, disponible 24h/24.</p>
+          <div class="svc-feats">
+            <div class="svc-feat">Design entièrement sur mesure</div>
+            <div class="svc-feat">100% responsive et rapide</div>
+            <div class="svc-feat">SEO technique intégré</div>
+            <div class="svc-feat">Livré en 3 à 5 jours</div>
+          </div>
+          <a href="#pricing" class="btn-glow" style="display:inline-flex">Voir les tarifs →</a>
         </div>
-        <div class="m-card">
-          <div class="m-num">7 jours</div>
-          <div class="m-lbl">Délai moyen garanti</div>
+        <div class="svc-card-3d" id="card3d-0">
+          <div class="svc-card-inner" id="card-inner-0">
+            <div class="svc-card-grid"></div>
+            <div class="svc-card-glow"></div>
+            <div class="svc-card-scan"></div>
+            <div class="svc-card-corner tl"></div>
+            <div class="svc-card-corner tr"></div>
+            <div class="svc-card-corner bl"></div>
+            <div class="svc-card-corner br"></div>
+            <div class="svc-card-icon">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2.5"/>
+                <path d="M3 9h18M9 21V9"/>
+                <circle cx="6" cy="6" r=".8" fill="#22d3ee"/>
+                <circle cx="9" cy="6" r=".8" fill="#22d3ee"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- STATS -->
-  <div id="stats">
-    <div class="stats-row">
-      <div class="stat-cell rv">
-        <div class="stat-num"><span class="count" data-target="20">0</span><span class="a">+</span></div>
-        <div class="stat-lbl">Sites réalisés</div>
+      <div class="svc-slide">
+        <div class="svc-bg-num">02</div>
+        <div>
+          <span class="svc-n">Service 02 / 03</span>
+          <h3 class="svc-h">Refonte &amp;<br>Modernisation</h3>
+          <p class="svc-p">Votre site existe mais il date ? Je le transforme en outil de vente moderne. Nouveau design, nouvelle performance, même identité. Sans repartir de zéro.</p>
+          <div class="svc-feats">
+            <div class="svc-feat">Audit préalable offert</div>
+            <div class="svc-feat">Conservation du référencement existant</div>
+            <div class="svc-feat">Migration et redirection incluses</div>
+            <div class="svc-feat">Performance x3 garantie</div>
+          </div>
+          <a href="#contact" class="btn-glow" style="display:inline-flex">Demander un audit →</a>
+        </div>
+        <div class="svc-card-3d" id="card3d-1">
+          <div class="svc-card-inner" id="card-inner-1" style="border-color:rgba(14,165,233,.18)">
+            <div class="svc-card-grid" style="background-image:linear-gradient(rgba(14,165,233,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(14,165,233,.04) 1px,transparent 1px);background-size:48px 48px"></div>
+            <div class="svc-card-glow" style="background:radial-gradient(circle at 50% 50%,rgba(14,165,233,.1),transparent 65%)"></div>
+            <div class="svc-card-scan" style="background:linear-gradient(90deg,transparent,#0ea5e9,transparent)"></div>
+            <div class="svc-card-corner tl" style="border-color:rgba(14,165,233,.4)"></div>
+            <div class="svc-card-corner tr" style="border-color:rgba(14,165,233,.4)"></div>
+            <div class="svc-card-corner bl" style="border-color:rgba(14,165,233,.4)"></div>
+            <div class="svc-card-corner br" style="border-color:rgba(14,165,233,.4)"></div>
+            <div class="svc-card-icon">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="1">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="stat-cell rv d1">
-        <div class="stat-num"><span class="count" data-target="7">0</span><span class="a">j</span></div>
-        <div class="stat-lbl">Délai moyen</div>
+
+      <div class="svc-slide">
+        <div class="svc-bg-num">03</div>
+        <div>
+          <span class="svc-n">Service 03 / 03</span>
+          <h3 class="svc-h">Landing Page<br>Haute Conversion</h3>
+          <p class="svc-p">Une page avec un seul objectif : convertir. Pour les campagnes pub, les lancements produit ou la capture de leads. Chaque pixel est pensé pour l'action.</p>
+          <div class="svc-feats">
+            <div class="svc-feat">Architecture de conversion optimisée</div>
+            <div class="svc-feat">Tracking et analytics intégrés</div>
+            <div class="svc-feat">Formulaire et CTA testés</div>
+            <div class="svc-feat">Livré en 48h</div>
+          </div>
+          <a href="#contact" class="btn-glow" style="display:inline-flex">Lancer ce projet →</a>
+        </div>
+        <div class="svc-card-3d" id="card3d-2">
+          <div class="svc-card-inner" id="card-inner-2" style="border-color:rgba(129,140,248,.18)">
+            <div class="svc-card-grid" style="background-image:linear-gradient(rgba(129,140,248,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(129,140,248,.04) 1px,transparent 1px);background-size:48px 48px"></div>
+            <div class="svc-card-glow" style="background:radial-gradient(circle at 50% 50%,rgba(129,140,248,.1),transparent 65%)"></div>
+            <div class="svc-card-scan" style="background:linear-gradient(90deg,transparent,#818cf8,transparent)"></div>
+            <div class="svc-card-corner tl" style="border-color:rgba(129,140,248,.4)"></div>
+            <div class="svc-card-corner tr" style="border-color:rgba(129,140,248,.4)"></div>
+            <div class="svc-card-corner bl" style="border-color:rgba(129,140,248,.4)"></div>
+            <div class="svc-card-corner br" style="border-color:rgba(129,140,248,.4)"></div>
+            <div class="svc-card-icon">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="stat-cell rv d2">
-        <div class="stat-num"><span class="count" data-target="350">0</span><span class="a"> CHF</span></div>
-        <div class="stat-lbl">À partir de</div>
-      </div>
-      <div class="stat-cell rv d3">
-        <div class="stat-num"><span class="count" data-target="100">0</span><span class="a">%</span></div>
-        <div class="stat-lbl">Responsive mobile</div>
+
+    </div>
+  </div>
+</div>
+
+<div class="svc-dots" id="svcDots">
+  <div class="svc-dot on"></div>
+  <div class="svc-dot"></div>
+  <div class="svc-dot"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-left r-l">
+    <div class="about-sphere-wrap" style="height:400px">
+      <div class="a-ring" style="width:100%;height:100%;top:50%;left:50%"></div>
+      <div class="a-ring"></div>
+      <div class="a-ring"></div>
+      <div class="a-dot"></div>
+      <div class="about-center-badge">
+        <div class="a-badge-num"><span>28</span>+</div>
+        <div class="a-badge-label">Sites livrés</div>
       </div>
     </div>
   </div>
+  <div class="r-right">
+    <span class="s-eye">À propos</span>
+    <h2 class="s-title">Pas une agence.<br>Un expert dédié.</h2>
+    <p class="s-sub">Je suis Guillaume, développeur web basé à Martigny. Je travaille directement avec vous, sans intermédiaire, pour créer des sites qui ont un impact réel sur votre chiffre d'affaires.</p>
+    <div class="about-chips">
+      <span class="chip">Valais</span>
+      <span class="chip">Remote</span>
+      <span class="chip">3 ans d'expérience</span>
+      <span class="chip">Prix fixe</span>
+      <span class="chip">Délai garanti</span>
+    </div>
+    <ul class="about-list">
+      <li><div class="li-icon">→</div>Interlocuteur unique du brief au lancement</li>
+      <li><div class="li-icon">→</div>Délais respectés, prix fixé à l'avance, sans surprise</li>
+      <li><div class="li-icon">→</div>Code propre, rapide, sans dépendances inutiles</li>
+      <li><div class="li-icon">→</div>Formation à la gestion de contenu incluse</li>
+      <li><div class="li-icon">→</div>Suivi et disponibilité post-lancement</li>
+    </ul>
+    <a href="#contact" class="btn-glow" style="display:inline-flex">Parler de votre projet</a>
+  </div>
+</section>
 
-  <!-- LE PROBLÈME -->
-  <section id="probleme">
-    <div class="w">
-      <div class="p-grid">
-        <div class="rv">
-          <h2 class="sec-h">Votre site actuel vous coûte des clients.</h2>
-          <p class="sec-body">La majorité des PME suisses ont un site qui date, qui ne s'affiche pas sur mobile, ou que Google ne trouve pas. Pendant ce temps, vos concurrents avancent.</p>
-        </div>
-        <div class="pbl-items">
-          <div class="pbl-item rv">
-            <div class="pbl-n">01</div>
-            <div class="pbl-t">Invisible sur mobile</div>
-            <div class="pbl-d">Plus de 60% des recherches se font sur téléphone. Un site non responsive perd ces visiteurs en quelques secondes.</div>
-          </div>
-          <div class="pbl-item rv d1">
-            <div class="pbl-n">02</div>
-            <div class="pbl-t">Trop lent pour Google</div>
-            <div class="pbl-d">Un site qui charge en plus de 3 secondes perd la moitié de ses visiteurs. Google le pénalise dans ses résultats.</div>
-          </div>
-          <div class="pbl-item rv d2">
-            <div class="pbl-n">03</div>
-            <div class="pbl-t">Zéro automatisation</div>
-            <div class="pbl-d">Formulaires sans suite, emails manuels, relances oubliées : chaque tâche répétitive est du temps perdu sur votre coeur de métier.</div>
-          </div>
-        </div>
+<!-- PROCESS -->
+<section id="process">
+  <div class="r" style="text-align:center;max-width:560px;margin:0 auto">
+    <span class="s-eye">Méthode</span>
+    <h2 class="s-title">Simple. Efficace. Prévisible.</h2>
+    <p class="s-sub" style="margin:0 auto">Quatre étapes claires, aucune mauvaise surprise.</p>
+  </div>
+  <div class="process-track">
+    <div class="proc-card r">
+      <span class="proc-step">Étape 01</span>
+      <div class="proc-ico">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </div>
+      <div class="proc-h">Brief &amp; Audit</div>
+      <p class="proc-p">On analyse votre marché, vos concurrents, votre cible. Je comprends où vous en êtes et où vous voulez aller avant d'ouvrir un éditeur.</p>
+      <div class="proc-num">01</div>
+    </div>
+    <div class="proc-card r r-d1">
+      <span class="proc-step">Étape 02</span>
+      <div class="proc-ico">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <div class="proc-h">Design &amp; Structure</div>
+      <p class="proc-p">Maquette sur mesure, arborescence pensée pour l'utilisateur et pour Google. Votre approbation avant tout développement.</p>
+      <div class="proc-num">02</div>
+    </div>
+    <div class="proc-card r r-d2">
+      <span class="proc-step">Étape 03</span>
+      <div class="proc-ico">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div class="proc-h">Développement</div>
+      <p class="proc-p">Code performant, animations soignées, responsive parfait. 3 à 5 jours pour un site vitrine complet, fonctionnel et livrable.</p>
+      <div class="proc-num">03</div>
+    </div>
+    <div class="proc-card r r-d3">
+      <span class="proc-step">Étape 04</span>
+      <div class="proc-ico">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="proc-h">Lancement &amp; Suivi</div>
+      <p class="proc-p">Mise en ligne, configuration SEO, formation à la gestion. Je reste disponible après la livraison pour tout ajustement.</p>
+      <div class="proc-num">04</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="r" style="text-align:center">
+    <span class="s-eye">Tarifs</span>
+    <h2 class="s-title">Prix clairs. Aucune mauvaise surprise.</h2>
+    <p class="s-sub" style="margin:0 auto">Tout est inclus dans le prix affiché. Aucun coût caché.</p>
+  </div>
+  <div class="pricing-wrap">
+    <div class="p-card r">
+      <div class="p-plan">Essentiel</div>
+      <div class="p-price"><sup>CHF</sup>490</div>
+      <p class="p-desc">Pour démarrer avec une présence web professionnelle et propre.</p>
+      <ul class="p-list">
+        <li>Site 1 à 3 pages</li>
+        <li>Design sur mesure</li>
+        <li>100% responsive</li>
+        <li>Hébergement 1 an inclus</li>
+        <li>Formulaire de contact</li>
+        <li class="off">Animations avancées</li>
+        <li class="off">SEO avancé</li>
+      </ul>
+      <a href="#contact" class="p-btn outline">Démarrer</a>
+    </div>
+    <div class="p-card featured r r-d1">
+      <span class="p-badge">Populaire</span>
+      <div class="p-plan">Pro</div>
+      <div class="p-price"><sup>CHF</sup>890</div>
+      <p class="p-desc">Le pack complet pour les entrepreneurs qui veulent un site qui vend.</p>
+      <ul class="p-list">
+        <li>Site jusqu'à 6 pages</li>
+        <li>Design premium sur mesure</li>
+        <li>Animations &amp; interactions</li>
+        <li>SEO technique complet</li>
+        <li>Hébergement 1 an inclus</li>
+        <li>Google Analytics configuré</li>
+        <li>Suivi 3 mois inclus</li>
+      </ul>
+      <a href="#contact" class="p-btn solid">Choisir ce plan</a>
+    </div>
+    <div class="p-card r r-d2">
+      <div class="p-plan">Sur mesure</div>
+      <div class="p-price" style="font-size:1.8rem;padding-top:.4rem">Sur devis</div>
+      <p class="p-desc">E-commerce, application web, projet complexe ou multi-pages.</p>
+      <ul class="p-list">
+        <li>Pages illimitées</li>
+        <li>E-commerce / boutique</li>
+        <li>Fonctionnalités avancées</li>
+        <li>Intégrations API</li>
+        <li>Formation équipe incluse</li>
+        <li>Support prioritaire</li>
+        <li>Maintenance mensuelle</li>
+      </ul>
+      <a href="#contact" class="p-btn outline">Demander un devis</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testi">
+  <div class="r" style="text-align:center">
+    <span class="s-eye">Témoignages</span>
+    <h2 class="s-title">Ce qu'ils en disent</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="t-card r">
+      <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="t-text">"Guillaume a livré notre site en 4 jours chrono. Exactement ce qu'on voulait, sans allers-retours interminables."</p>
+      <div class="t-author">
+        <div class="t-av">MB</div>
+        <div><div class="t-name">Marc B.</div><div class="t-role">Artisan menuisier, Sion</div></div>
       </div>
     </div>
-  </section>
-
-  <!-- NOS SERVICES -->
-  <section id="services">
-    <div class="w">
-      <div class="eyebrow rv">Ce que nous faisons</div>
-      <h2 class="sec-h rv d1">Trois offres. Une seule promesse.</h2>
-      <div class="svc-list">
-        <div class="svc-row rv">
-          <div class="svc-n">01</div>
-          <div>
-            <div class="svc-name">Refonte web</div>
-            <div class="svc-chip">7 jours</div>
-          </div>
-          <div class="svc-desc">Votre site existant redessiné de A à Z. Design moderne, performances optimisées, 100% responsive. Contenu repris fidèlement, image sublimée.</div>
-          <div class="svc-price">
-            <div class="svc-price-n">350 CHF+</div>
-            <div class="svc-price-l">à partir de</div>
-          </div>
-        </div>
-        <div class="svc-row rv d1">
-          <div class="svc-n">02</div>
-          <div>
-            <div class="svc-name">Création complète</div>
-            <div class="svc-chip">14 jours</div>
-          </div>
-          <div class="svc-desc">Pas encore de site, ou repartir de zéro. Nous créons votre identité visuelle et votre présence en ligne complète, de la charte au déploiement.</div>
-          <div class="svc-price">
-            <div class="svc-price-n">550 CHF+</div>
-            <div class="svc-price-l">à partir de</div>
-          </div>
-        </div>
-        <div class="svc-row rv d2">
-          <div class="svc-n">03</div>
-          <div>
-            <div class="svc-name">Automatisation IA</div>
-            <div class="svc-chip">Sur mesure</div>
-          </div>
-          <div class="svc-desc">Audit de vos processus, identification des tâches chronophages, mise en place d'automatisations. Emails, relances, devis, fiches clients : on s'en occupe.</div>
-          <div class="svc-price">
-            <div class="svc-price-n">Sur devis</div>
-            <div class="svc-price-l">audit inclus</div>
-          </div>
-        </div>
+    <div class="t-card big r r-d1">
+      <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="t-text">"Notre ancien site datait de 2015. La refonte a tout changé : on reçoit maintenant des demandes de contact chaque semaine via le formulaire. Le ROI était là en moins de deux mois."</p>
+      <div class="t-author">
+        <div class="t-av">SL</div>
+        <div><div class="t-name">Sophie L.</div><div class="t-role">Fondatrice, Institut Beauté Sierre</div></div>
       </div>
     </div>
-  </section>
-
-  <!-- PROCESSUS -->
-  <section id="processus">
-    <div class="w">
-      <div class="eyebrow rv">Comment ça marche</div>
-      <h2 class="sec-h rv d1">Simple, rapide, sans surprise.</h2>
-      <div class="steps">
-        <div class="step-item rv">
-          <div class="step-big">01</div>
-          <div class="step-t">Démo gratuite</div>
-          <div class="step-d">Je prépare une version redessinée de votre site, sans engagement. Vous la consultez et me faites part de vos retours.</div>
-        </div>
-        <div class="step-item rv d1">
-          <div class="step-big">02</div>
-          <div class="step-t">Brief et validation</div>
-          <div class="step-d">On définit ensemble vos besoins, le design final, les fonctionnalités. Devis validé, on démarre.</div>
-        </div>
-        <div class="step-item rv d2">
-          <div class="step-big">03</div>
-          <div class="step-t">Développement</div>
-          <div class="step-d">Je code votre site ou vos automatisations. Vous êtes informé à chaque étape. Zéro surprise technique.</div>
-        </div>
-        <div class="step-item rv d3">
-          <div class="step-big">04</div>
-          <div class="step-t">Mise en ligne</div>
-          <div class="step-d">Votre site est déployé sur votre domaine. Je gère tout : hébergement, DNS, redirections.</div>
-        </div>
+    <div class="t-card r r-d2">
+      <div class="t-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="t-text">"Prix fixe, délai tenu, zéro stress. C'est rare dans le web. Je recommande sans hésiter."</p>
+      <div class="t-author">
+        <div class="t-av">DP</div>
+        <div><div class="t-name">David P.</div><div class="t-role">Restaurant, Martigny</div></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- TARIFS -->
-  <section id="tarifs">
-    <div class="w">
-      <h2 class="sec-h rv">Clair. Tout compris. Sans surprise.</h2>
-      <div class="pricing-wrap">
-        <div class="p-card rv">
-          <div class="p-tier">Refonte Essentiel</div>
-          <div class="p-price"><sup>CHF</sup>350<span></span></div>
-          <div class="p-note">Paiement unique</div>
-          <div class="p-div"></div>
-          <ul class="p-feats">
-            <li>Site one-page ou jusqu'à 3 pages</li>
-            <li>Design responsive mobile</li>
-            <li>Reprise de votre contenu actuel</li>
-            <li>Formulaire de contact</li>
-            <li>Mise en ligne sur votre domaine</li>
-            <li>Livraison en 7 jours</li>
-          </ul>
-          <a href="#contact" class="p-btn p-btn-g">Démarrer</a>
-        </div>
-        <div class="p-card featured rv d1">
-          <div class="p-tier">Refonte Standard</div>
-          <div class="p-price"><sup>CHF</sup>450<span></span></div>
-          <div class="p-note">Paiement unique</div>
-          <div class="p-div"></div>
-          <ul class="p-feats">
-            <li>Jusqu'à 5 pages</li>
-            <li>Design responsive avec animations</li>
-            <li>Optimisation du contenu incluse</li>
-            <li>Galerie photo intégrée</li>
-            <li>Google Maps et réseaux sociaux</li>
-            <li>Livraison en 7 jours</li>
-            <li>1 révision incluse</li>
-          </ul>
-          <a href="#contact" class="p-btn p-btn-a">Démarrer</a>
-        </div>
-        <div class="p-card rv d2">
-          <div class="p-tier">Refonte Premium</div>
-          <div class="p-price"><sup>CHF</sup>550<span></span></div>
-          <div class="p-note">Paiement unique</div>
-          <div class="p-div"></div>
-          <ul class="p-feats">
-            <li>Jusqu'à 8 pages</li>
-            <li>Design sur-mesure avancé</li>
-            <li>Réécriture complète du contenu</li>
-            <li>Système de réservation ou prise de RDV</li>
-            <li>Optimisation SEO complète</li>
-            <li>Livraison en 7 à 10 jours</li>
-            <li>2 révisions incluses</li>
-          </ul>
-          <a href="#contact" class="p-btn p-btn-g">Démarrer</a>
-        </div>
-      </div>
-      <p class="pricing-foot">Création complète à partir de 550 CHF &middot; Maintenance dès 39 CHF/mois &middot; <a href="#contact">Nous consulter pour l'automatisation IA</a></p>
+<!-- FAQ -->
+<section id="faq">
+  <div class="r" style="text-align:center;max-width:640px;margin:0 auto">
+    <span class="s-eye">FAQ</span>
+    <h2 class="s-title">Questions fréquentes</h2>
+  </div>
+  <div class="faq-inner">
+    <div class="faq-item">
+      <button class="faq-btn">Combien de temps pour livrer un site ?<span class="faq-ico">+</span></button>
+      <div class="faq-body">Pour un site vitrine standard (3-5 pages), comptez 3 à 5 jours ouvrés après validation du brief et du design. Les projets e-commerce ou sur mesure demandent 2 à 4 semaines selon la complexité.</div>
     </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq">
-    <div class="w">
-      <h2 class="sec-h rv">Questions fréquentes.</h2>
-      <div class="faq-cols">
-        <div>
-          <div class="faq-item rv">
-            <button class="faq-btn">
-              <span class="faq-q">La démo gratuite m'engage à quelque chose ?</span>
-              <div class="faq-ico"></div>
-            </button>
-            <div class="faq-ans"><p>Non, absolument pas. La démo est préparée sans contrepartie. Si elle vous plaît et que vous souhaitez aller plus loin, on en discute. Sinon, vous n'avez rien à faire.</p></div>
-          </div>
-          <div class="faq-item rv d1">
-            <button class="faq-btn">
-              <span class="faq-q">Qui s'occupe du contenu texte et des photos ?</span>
-              <div class="faq-ico"></div>
-            </button>
-            <div class="faq-ans"><p>Le contenu existant est repris depuis votre site actuel. Pour les photos, j'utilise des images libres de droits dans un premier temps. Si vous souhaitez intégrer les vôtres, vous me les envoyez et je les intègre.</p></div>
-          </div>
-          <div class="faq-item rv d2">
-            <button class="faq-btn">
-              <span class="faq-q">Mon site reste-t-il en ligne pendant la refonte ?</span>
-              <div class="faq-ico"></div>
-            </button>
-            <div class="faq-ans"><p>Oui. Votre site actuel reste actif jusqu'à la bascule vers le nouveau, qui se fait en quelques minutes sans interruption visible pour vos visiteurs.</p></div>
-          </div>
-        </div>
-        <div>
-          <div class="faq-item rv">
-            <button class="faq-btn">
-              <span class="faq-q">En quoi Horizon IA se distingue des autres agences ?</span>
-              <div class="faq-ico"></div>
-            </button>
-            <div class="faq-ans"><p>Pas de devis au bout de trois semaines, pas d'équipe qui change à mi-projet, pas de surprises sur la facture. Je suis l'interlocuteur unique du début à la fin, et vous voyez le résultat avant de payer.</p></div>
-          </div>
-          <div class="faq-item rv d1">
-            <button class="faq-btn">
-              <span class="faq-q">Combien coûte l'automatisation IA ?</span>
-              <div class="faq-ico"></div>
-            </button>
-            <div class="faq-ans"><p>Le tarif dépend de la complexité des processus à automatiser. Je commence toujours par un audit gratuit pour identifier les gains et vous proposer un devis transparent.</p></div>
-          </div>
-          <div class="faq-item rv d2">
-            <button class="faq-btn">
-              <span class="faq-q">Proposez-vous un suivi après la mise en ligne ?</span>
-              <div class="faq-ico"></div>
-            </button>
-            <div class="faq-ans"><p>Oui, des formules de maintenance mensuelle sont disponibles à partir de 39 CHF/mois. Elles couvrent les mises à jour de contenu, les performances et un support réactif.</p></div>
-          </div>
-        </div>
-      </div>
+    <div class="faq-item">
+      <button class="faq-btn">Puis-je modifier mon site moi-même après livraison ?<span class="faq-ico">+</span></button>
+      <div class="faq-body">Oui. Je livre le code source complet et vous forme à la gestion du contenu. Pour les modifications plus complexes, je suis disponible à un tarif horaire transparent, communiqué à l'avance.</div>
     </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="w">
-      <div class="contact-grid">
-        <div class="rv">
-          <div class="eyebrow" style="margin-bottom:1rem">Contact</div>
-          <h2 class="sec-h">Parlons de votre projet.</h2>
-          <p class="sec-body" style="margin-top:.75rem">Remplissez le formulaire et je vous réponds sous 24h avec une première analyse de votre situation.</p>
-          <div class="cdet">
-            <div class="cdet-item">
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                <rect x="1" y="2.5" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-                <path d="M1 5l6.5 4L14 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-              </svg>
-              guillaume@horizonia.ch
-            </div>
-            <div class="cdet-item">
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                <circle cx="7.5" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3"/>
-                <circle cx="7.5" cy="6" r="1.5" fill="currentColor"/>
-                <path d="M7.5 10.5V14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-              </svg>
-              Martigny, Valais, Suisse
-            </div>
-            <div class="cdet-item">
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                <circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.3"/>
-                <path d="M7.5 4V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Réponse garantie sous 24h
-            </div>
-          </div>
-        </div>
-        <form class="form rv d1" onsubmit="submitForm(event)">
-          <div class="form-row">
-            <div class="form-g">
-              <label class="form-l" for="nom">Votre nom</label>
-              <input class="form-c" type="text" id="nom" name="nom" placeholder="Marie Dupont" required>
-            </div>
-            <div class="form-g">
-              <label class="form-l" for="email">Email</label>
-              <input class="form-c" type="email" id="email" name="email" placeholder="marie@exemple.ch" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-g">
-              <label class="form-l" for="tel">Téléphone</label>
-              <input class="form-c" type="tel" id="tel" name="tel" placeholder="079 000 00 00">
-            </div>
-            <div class="form-g">
-              <label class="form-l" for="svc">Service souhaité</label>
-              <select class="form-c" id="svc" name="svc" required>
-                <option value="" disabled selected>Choisir...</option>
-                <option value="refonte">Refonte de site</option>
-                <option value="creation">Création complète</option>
-                <option value="automatisation">Automatisation IA</option>
-                <option value="maintenance">Maintenance</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-g">
-            <label class="form-l" for="url">URL de votre site actuel</label>
-            <input class="form-c" type="url" id="url" name="url" placeholder="https://votre-site.ch">
-          </div>
-          <div class="form-g">
-            <label class="form-l" for="msg">Décrivez votre besoin</label>
-            <textarea class="form-c" id="msg" name="msg" placeholder="Votre activité, vos besoins, vos questions..." required></textarea>
-          </div>
-          <button type="submit" id="form-btn" class="btn btn-prim" style="width:100%;padding:.875rem;font-size:.9375rem;margin-top:.25rem">
-            Envoyer ma demande
-          </button>
-        </form>
-      </div>
+    <div class="faq-item">
+      <button class="faq-btn">Le prix affiché est-il vraiment tout inclus ?<span class="faq-ico">+</span></button>
+      <div class="faq-body">Oui, le prix inclut le design, le développement, l'hébergement première année et la mise en ligne. Il n'y a pas de coût caché. Si des options supplémentaires sont souhaitées, elles sont chiffrées à l'avance.</div>
     </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <a href="#hero" class="f-logo">HORIZON <em>IA</em></a>
-      <div class="f-links">
-        <a href="#services">Services</a>
-        <a href="#processus">Processus</a>
-        <a href="#tarifs">Tarifs</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <div class="f-copy">&copy; 2026 Horizon IA &middot; Martigny, Valais</div>
+    <div class="faq-item">
+      <button class="faq-btn">Travaillez-vous uniquement en Valais ?<span class="faq-ico">+</span></button>
+      <div class="faq-body">Non. Je travaille avec des clients en Suisse et à l'international. Tout se passe à distance via visioconférence et outils collaboratifs. La localisation n'est pas un obstacle.</div>
     </div>
-  </footer>
+    <div class="faq-item">
+      <button class="faq-btn">Que se passe-t-il si le résultat ne me convient pas ?<span class="faq-ico">+</span></button>
+      <div class="faq-body">Le processus est conçu pour éviter ça : brief détaillé, maquette validée avant développement, retours intégrés tout au long du projet. Si malgré tout quelque chose ne va pas, on itère jusqu'à satisfaction.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-btn">Proposez-vous la maintenance après livraison ?<span class="faq-ico">+</span></button>
+      <div class="faq-body">Oui, je propose des forfaits de maintenance mensuelle pour les mises à jour de sécurité, les modifications de contenu et le monitoring des performances. À partir de CHF 49/mois.</div>
+    </div>
+  </div>
+</section>
 
-  <script>
-  /* ---- NAV SCROLL ---- */
-  const nav = document.getElementById('nav');
-  let lastY = 0;
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-hdr r">
+    <span class="s-eye">Contact</span>
+    <h2 class="s-title">Démarrons votre projet</h2>
+    <p class="s-sub">Première consultation gratuite. Réponse sous 24h.</p>
+  </div>
+  <div class="contact-grid" style="margin-top:3.5rem">
+    <div class="contact-info r-l">
+      <div class="c-item">
+        <div class="c-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div><div class="c-label">Email</div><div class="c-val"><a href="mailto:guillaume@horizonia.ch">guillaume@horizonia.ch</a></div></div>
+      </div>
+      <div class="c-item">
+        <div class="c-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.63a19.79 19.79 0 01-3-8.58A2 2 0 012.11 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.45-.45a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div><div class="c-label">Téléphone</div><div class="c-val"><a href="tel:+41793840332">+41 79 384 03 32</a></div></div>
+      </div>
+      <div class="c-item">
+        <div class="c-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="c-label">Localisation</div><div class="c-val">Martigny, Valais — Suisse</div></div>
+      </div>
+      <div class="avail-badge"><span class="avail-dot"></span>Disponible pour nouveaux projets</div>
+    </div>
+    <form class="r-right" id="cform">
+      <div class="f-row">
+        <div class="f-field"><label for="fn">Prénom</label><input type="text" id="fn" placeholder="Jean"></div>
+        <div class="f-field"><label for="co">Entreprise</label><input type="text" id="co" placeholder="Ma Société Sàrl"></div>
+      </div>
+      <div class="f-field"><label for="em">Email</label><input type="email" id="em" placeholder="jean@exemple.ch"></div>
+      <div class="f-field">
+        <label for="bu">Budget estimé</label>
+        <select id="bu">
+          <option value="">Sélectionner...</option>
+          <option>Moins de CHF 500</option>
+          <option>CHF 500 – 900</option>
+          <option>CHF 900 – 2 000</option>
+          <option>Plus de CHF 2 000</option>
+        </select>
+      </div>
+      <div class="f-field"><label for="mg">Votre projet</label><textarea id="mg" placeholder="Décrivez votre activité et ce que vous attendez du site..."></textarea></div>
+      <button type="submit" class="f-submit">Envoyer ma demande →</button>
+    </form>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div id="cta">
+  <h2 class="s-title r" style="text-align:center;font-size:clamp(1.9rem,4vw,2.8rem)">Prêt à transformer votre<br>présence en ligne ?</h2>
+  <p class="r r-d1">Chaque jour sans site performant est un client que vous ne captez pas.</p>
+  <a href="#contact" class="btn-glow r r-d2" style="display:inline-flex;margin-top:.5rem">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Démarrer maintenant
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Horizonia<span class="dot"></span></div>
+  <ul class="f-links">
+    <li><a href="#svc-section">Services</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="f-copy">© 2026 Horizonia · Martigny, Suisse</div>
+</footer>
+
+<!-- THREE.JS -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.min.js"></script>
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script>
+/* ===== PROGRESS BAR ===== */
+(function(){
+  const bar = document.getElementById('prog');
   window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    nav.classList.toggle('scrolled', y > 40);
-    lastY = y;
-  }, { passive: true });
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = Math.min(pct, 100) + '%';
+  }, {passive: true});
+})();
 
-  /* ---- INTERSECTION REVEALS ---- */
-  const revObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.rv').forEach(el => revObs.observe(el));
+/* ===== NAV ===== */
+(function(){
+  const nav = document.getElementById('nav');
+  const ham = document.getElementById('ham');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, {passive: true});
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    nav.classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => { ham.classList.remove('open'); nav.classList.remove('open'); });
+  });
+})();
 
-  /* clip-path reveals */
-  const clipObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('in'); clipObs.unobserve(e.target); }
-    });
-  }, { threshold: 0.2 });
-  document.querySelectorAll('.clip-inner').forEach(el => clipObs.observe(el));
+/* ===== THREE.JS NEURAL SPHERE ===== */
+(function(){
+  const canvas = document.getElementById('three-canvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+  const hero = document.getElementById('hero');
+  const W = () => hero.clientWidth, H = () => hero.clientHeight;
 
-  /* fire hero immediately */
-  setTimeout(() => {
-    document.querySelectorAll('#hero .rv').forEach(el => el.classList.add('in'));
-    document.querySelectorAll('#hero .clip-inner').forEach(el => el.classList.add('in'));
-  }, 150);
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(W(), H());
 
-  /* ---- TYPEWRITER ---- */
-  const words = ['convertissent', 'performent', 'inspirent confiance'];
-  const twTarget = document.getElementById('tw-target');
-  const twCursor = document.getElementById('tw-cursor');
-  let wi = 0, ci = 0, deleting = false, twTimer;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, W() / H(), 0.1, 1000);
+  camera.position.z = 5.8;
 
-  function typeStep() {
-    const word = words[wi];
-    if (!deleting) {
-      ci++;
-      twTarget.textContent = word.slice(0, ci);
-      if (ci === word.length) {
-        deleting = true;
-        twTimer = setTimeout(typeStep, 1800);
-        return;
-      }
-    } else {
-      ci--;
-      twTarget.textContent = word.slice(0, ci);
-      if (ci === 0) {
-        deleting = false;
-        wi = (wi + 1) % words.length;
-        twTimer = setTimeout(typeStep, 300);
-        return;
+  /* ---- particle sphere ---- */
+  const N = 520;
+  const R = 2.4;
+  const pts = [];
+  for (let i = 0; i < N; i++) {
+    const phi = Math.acos(1 - 2 * (i + .5) / N);
+    const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+    pts.push(R*Math.sin(phi)*Math.cos(theta), R*Math.sin(phi)*Math.sin(theta), R*Math.cos(phi));
+  }
+  const ptGeo = new THREE.BufferGeometry();
+  ptGeo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+  const ptMat = new THREE.PointsMaterial({color:0x22d3ee, size:.028, transparent:true, opacity:.9, sizeAttenuation:true});
+  const sphere = new THREE.Points(ptGeo, ptMat);
+  scene.add(sphere);
+
+  /* ---- connection lines (precomputed) ---- */
+  const THRESH = 0.62;
+  const linePts = [];
+  for (let i = 0; i < N; i++) {
+    const ax=pts[i*3], ay=pts[i*3+1], az=pts[i*3+2];
+    for (let j=i+1; j<N; j++) {
+      const dx=ax-pts[j*3], dy=ay-pts[j*3+1], dz=az-pts[j*3+2];
+      if (dx*dx+dy*dy+dz*dz < THRESH*THRESH) {
+        linePts.push(ax,ay,az, pts[j*3],pts[j*3+1],pts[j*3+2]);
       }
     }
-    twTimer = setTimeout(typeStep, deleting ? 55 : 85);
   }
-  setTimeout(typeStep, 900);
+  const lGeo = new THREE.BufferGeometry();
+  lGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePts, 3));
+  const lMat = new THREE.LineBasicMaterial({color:0x22d3ee, transparent:true, opacity:.08});
+  const lines = new THREE.LineSegments(lGeo, lMat);
+  scene.add(lines);
 
-  /* ---- COUNTER ANIMATION ---- */
-  function animCount(el, target) {
-    const dur = Math.min(1800, target * 6);
-    let start = null;
-    const ease = t => 1 - Math.pow(1 - t, 3);
-    const step = ts => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / dur, 1);
-      el.textContent = Math.round(ease(p) * target);
-      if (p < 1) requestAnimationFrame(step);
-      else el.textContent = target;
-    };
-    requestAnimationFrame(step);
-  }
+  /* ---- outer wireframe ring ---- */
+  const ringGeo = new THREE.TorusGeometry(2.5, .006, 6, 160);
+  const ringMat = new THREE.MeshBasicMaterial({color:0x22d3ee, transparent:true, opacity:.15});
+  const ring1 = new THREE.Mesh(ringGeo, ringMat);
+  ring1.rotation.x = Math.PI * .3;
+  scene.add(ring1);
+  const ring2 = ring1.clone();
+  ring2.rotation.x = Math.PI * .6;
+  ring2.rotation.z = Math.PI * .2;
+  scene.add(ring2);
 
-  const countObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        animCount(e.target, parseInt(e.target.dataset.target, 10));
-        countObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.count').forEach(el => countObs.observe(el));
+  /* ---- drag ---- */
+  let drag=false, px=0, py=0, vx=0, vy=0;
+  hero.addEventListener('mousedown', e=>{drag=true;px=e.clientX;py=e.clientY;vx=vy=0});
+  window.addEventListener('mouseup', ()=>drag=false);
+  window.addEventListener('mousemove', e=>{
+    if (!drag) return;
+    vx=(e.clientX-px)*.006; vy=(e.clientY-py)*.005;
+    sphere.rotation.y+=vx; sphere.rotation.x+=vy;
+    lines.rotation.y+=vx; lines.rotation.x+=vy;
+    ring1.rotation.y+=vx*.4; ring2.rotation.y+=vx*.4;
+    px=e.clientX; py=e.clientY;
+  });
+  /* touch */
+  hero.addEventListener('touchstart', e=>{const t=e.touches[0];drag=true;px=t.clientX;py=t.clientY}, {passive:true});
+  window.addEventListener('touchend', ()=>drag=false);
+  window.addEventListener('touchmove', e=>{
+    if (!drag) return;
+    const t=e.touches[0];
+    vx=(t.clientX-px)*.006; vy=(t.clientY-py)*.005;
+    sphere.rotation.y+=vx; sphere.rotation.x+=vy;
+    lines.rotation.y+=vx; lines.rotation.x+=vy;
+    px=t.clientX; py=t.clientY;
+  }, {passive:true});
 
-  /* ---- FAQ ACCORDION ---- */
-  document.querySelectorAll('.faq-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item = btn.closest('.faq-item');
-      const open = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-      if (!open) item.classList.add('open');
-    });
+  /* ---- resize ---- */
+  window.addEventListener('resize', ()=>{
+    renderer.setSize(W(), H());
+    camera.aspect=W()/H(); camera.updateProjectionMatrix();
   });
 
-  /* ---- PRICING SPOTLIGHT ---- */
+  /* ---- animate ---- */
+  let t=0;
+  (function tick(){
+    t+=.004;
+    if (!drag) {
+      sphere.rotation.y+=.0018+vx*.94;
+      lines.rotation.y+=.0018+vx*.94;
+      ring1.rotation.y+=.001;
+      ring2.rotation.y-=.0008;
+      vx*=.93; vy*=.93;
+    }
+    sphere.rotation.x = Math.sin(t*.35)*.1;
+    lines.rotation.x = sphere.rotation.x;
+    ptMat.opacity = .75 + Math.sin(t*1.3)*.15;
+    renderer.render(scene, camera);
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* ===== GSAP ===== */
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* horizontal scroll – desktop only */
+  if (window.innerWidth > 960) {
+    const pin = document.getElementById('svc-pin');
+    const track = document.getElementById('svc-track');
+    const dots = document.querySelectorAll('.svc-dot');
+    const slides = document.querySelectorAll('.svc-slide');
+    const dist = track.scrollWidth - window.innerWidth;
+
+    const hST = gsap.to(track, {
+      x: () => -dist,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: pin,
+        start: 'top top',
+        end: () => '+=' + (dist + window.innerWidth),
+        pin: true,
+        scrub: 1.2,
+        onUpdate: self => {
+          const idx = Math.round(self.progress * (slides.length - 1));
+          dots.forEach((d,i) => d.classList.toggle('on', i===idx));
+        }
+      }
+    });
+
+    /* 3D tilt on cards */
+    document.querySelectorAll('.svc-card-3d').forEach((wrap, i) => {
+      const inner = document.getElementById('card-inner-' + i);
+      if (!inner) return;
+      wrap.addEventListener('mousemove', e => {
+        const r = wrap.getBoundingClientRect();
+        const rx = ((e.clientY - r.top) / r.height - .5) * 18;
+        const ry = ((e.clientX - r.left) / r.width - .5) * -18;
+        inner.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+      });
+      wrap.addEventListener('mouseleave', () => {
+        inner.style.transform = '';
+      });
+    });
+  }
+}
+
+/* ===== REVEAL (IntersectionObserver) ===== */
+(function(){
+  const els = document.querySelectorAll('.r, .r-l, .r-right');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+})();
+
+/* ===== TYPEWRITER ===== */
+(function(){
+  const el = document.getElementById('tw');
+  if (!el) return;
+  const words = ['convertissent', 'performent', 'génèrent des leads'];
+  let wi=0, ci=0, del=false;
+  const tick = () => {
+    const w = words[wi];
+    el.textContent = del ? w.slice(0,ci--) : w.slice(0,ci++);
+    let d = del ? 55 : 95;
+    if (!del && ci === w.length+1) { d=2200; del=true; }
+    else if (del && ci < 0) { del=false; ci=0; wi=(wi+1)%words.length; d=380; }
+    setTimeout(tick, d);
+  };
+  tick();
+})();
+
+/* ===== COUNTERS ===== */
+(function(){
+  const ease = t => 1 - Math.pow(1-t, 3);
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.v);
+      const suffix = el.dataset.s || '';
+      const t0 = Date.now(), dur = 1800;
+      const run = () => {
+        const p = Math.min((Date.now()-t0)/dur, 1);
+        el.textContent = Math.round(ease(p)*target) + suffix;
+        if (p < 1) requestAnimationFrame(run);
+        else el.textContent = target + suffix;
+      };
+      run();
+      io.unobserve(el);
+    });
+  }, {threshold:.5});
+  document.querySelectorAll('.cnt').forEach(c => io.observe(c));
+})();
+
+/* ===== PRICING SPOTLIGHT ===== */
+(function(){
   document.querySelectorAll('.p-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
-      card.style.setProperty('--cx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--cy', (e.clientY - r.top) + 'px');
+      card.style.setProperty('--mx', (e.clientX-r.left)+'px');
+      card.style.setProperty('--my', (e.clientY-r.top)+'px');
     });
   });
+})();
 
-  /* ---- PARTICLE CANVAS ---- */
-  (function() {
-    const canvas = document.getElementById('hero-canvas');
-    const ctx = canvas.getContext('2d');
-    let pts = [];
-    const N = 55, LINK = 110;
-
-    function resize() {
-      canvas.width  = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      pts = Array.from({ length: N }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - .5) * .28,
-        vy: (Math.random() - .5) * .28,
-        r: Math.random() * 1.4 + .5,
-        o: Math.random() * .35 + .08
-      }));
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      pts.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34,211,238,${p.o})`;
-        ctx.fill();
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-      });
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-          const d = Math.sqrt(dx*dx + dy*dy);
-          if (d < LINK) {
-            ctx.beginPath();
-            ctx.moveTo(pts[i].x, pts[i].y);
-            ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(34,211,238,${.09 * (1 - d / LINK)})`;
-            ctx.lineWidth = .6;
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(draw);
-    }
-
-    resize();
-    draw();
-    window.addEventListener('resize', resize, { passive: true });
-  })();
-
-  /* ---- MOUSE PARALLAX ON HERO ORBS ---- */
-  const hero = document.getElementById('hero');
-  const orb1 = document.querySelector('.orb-1');
-  const orb2 = document.querySelector('.orb-2');
-  hero.addEventListener('mousemove', e => {
-    const cx = e.clientX / window.innerWidth - .5;
-    const cy = e.clientY / window.innerHeight - .5;
-    orb1.style.transform = `translate(${cx*30}px, ${cy*20}px)`;
-    orb2.style.transform = `translate(${-cx*24}px, ${-cy*18}px)`;
-  }, { passive: true });
-  hero.addEventListener('mouseleave', () => {
-    orb1.style.transform = '';
-    orb2.style.transform = '';
+/* ===== FAQ ===== */
+(function(){
+  document.querySelectorAll('.faq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const was = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!was) item.classList.add('open');
+    });
   });
+})();
 
-  /* ---- FORM SUBMIT ---- */
-  function submitForm(e) {
+/* ===== CONTACT FORM ===== */
+(function(){
+  document.getElementById('cform').addEventListener('submit', e => {
     e.preventDefault();
-    const btn = document.getElementById('form-btn');
-    const orig = btn.textContent;
-    btn.textContent = 'Message envoyé';
-    btn.style.background = '#16a34a';
-    btn.disabled = true;
+    const btn = e.target.querySelector('.f-submit');
+    btn.textContent = 'Message envoyé ✓';
+    btn.style.background = '#10b981';
+    btn.style.boxShadow = '0 0 24px rgba(16,185,129,.3)';
     setTimeout(() => {
-      btn.textContent = orig;
+      btn.textContent = 'Envoyer ma demande →';
       btn.style.background = '';
-      btn.disabled = false;
-      e.target.reset();
+      btn.style.boxShadow = '';
     }, 3500);
-  }
-  </script>
+  });
+})();
+</script>
 </body>
 </html>
